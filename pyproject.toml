@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "dialz"
+version = "0.1.0"
+description = ""
+authors = ["groovychoons <siddiquezs2@cardiff.ac.uk>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+torch = "^2.5.1"
+transformers = "^4.46.3"
+accelerate = "^1.1.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+black = "^24.10.0"
+flake8 = "^7.1.1"
+pre-commit = "^4.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
