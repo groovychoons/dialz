@@ -6,7 +6,7 @@ authors = ["groovychoons <siddiquezs2@cardiff.ac.uk>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 torch = "^2.5.1"
 transformers = "^4.46.3"
 accelerate = "^1.1.1"
