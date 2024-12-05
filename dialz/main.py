@@ -1,101 +1,76 @@
-# import os
-# import torch
-# from dotenv import load_dotenv
-# from transformers import AutoModelForCausalLM, AutoTokenizer
+import os
+import torch
+from dotenv import load_dotenv
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # from .vector import get_vector
 from .dataset import Dataset
+from .model import ControlModel
+from .vector import ControlVector
 
-# 1. Initialize a new dataset
-print("Initializing a new dataset...")
-dataset = Dataset()
+load_dotenv()
+hf_token = os.getenv("HF_TOKEN")
 
-# 2. Add individual entries
-print("\nAdding individual entries to the dataset...")
-dataset.add_entry("I love programming.", "I hate programming.")
-dataset.add_entry("The food was delicious.", "The food was terrible.")
-print(dataset)
+corpus_dataset = Dataset.load_corpus("data")
 
-# 3. Add entries from a saved list
-print("\nAdding entries from a pre-saved list...")
-pre_saved_data = [
-    {"positive": "I enjoy sunny days.", "negative": "I dislike rainy days."},
-    {"positive": "I love cats.", "negative": "I dislike dogs."},
-]
-dataset.add_from_saved(pre_saved_data)
-print(dataset)
+model_name = "mistralai/Mistral-7B-Instruct-v0.1"
 
-# 4. View the dataset as a list
-print("\nViewing the dataset as a list of entries...")
-for entry in dataset.view_dataset():
-    print(f"Positive: {entry.positive}, Negative: {entry.negative}")
+tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
+tokenizer.pad_token_id = 0
 
-# 5. Save the dataset to a file
-print("\nSaving the dataset to 'my_dataset.json'...")
-dataset.save_to_file("my_dataset.json")
-print("Dataset saved!")
+model = AutoModelForCausalLM.from_pretrained(
+    model_name, token=hf_token, torch_dtype=torch.float16
+)
+model = model.to(
+    "cuda:0"
+    if torch.cuda.is_available()
+    else "mps:0" if torch.backends.mps.is_available() else "cpu"
+)
+model = ControlModel(model, list(range(-5, -18, -1)))
 
-# 6. Load the dataset from the file
-print("\nLoading the dataset from 'my_dataset.json'...")
-loaded_dataset = Dataset.load_from_file("my_dataset.json")
-print("Loaded dataset:")
-print(loaded_dataset)
-
-# 7. Load a default corpus
-print("\nLoading a default corpus named 'blue'...")
-try:
-    corpus_dataset = Dataset.load_corpus("blue")
-    print("Loaded corpus:")
-    print(corpus_dataset)
-except FileNotFoundError:
-    print(
-        "Default corpus 'blue' not found. Ensure it exists in the 'corpus' \
-            folder."
-    )
-
-# 8. View the corpus as a list
-print("\nViewing the loaded corpus as a list of entries (if loaded):")
-if "corpus_dataset" in locals():
-    for entry in corpus_dataset.view_dataset():
-        print(f"Positive: {entry.positive}, Negative: {entry.negative}")
-
-print("\nAll features have been tested!")
+racism_vector = ControlVector.train(model, tokenizer, corpus_dataset)
 
 
-# # Load environment variables from the .env file
-# load_dotenv()
+def generate_with_vector(
+    input: str,
+    vector: ControlVector,
+    coeffs: tuple[float, float],
+    max_new_tokens: int = 128,
+    repetition_penalty: float = 1.1,
+    show_baseline: bool = True,
+):
+    positive_coeff, negative_coeff = coeffs
+    assert positive_coeff > 0
+    assert negative_coeff < 0
 
-# # Retrieve the Hugging Face token from the environment
-# hf_token = os.getenv("HF_TOKEN")
+    input_ids = tokenizer(input, return_tensors="pt").to(model.device)
+    settings = {
+        "pad_token_id": tokenizer.eos_token_id,  # silence warning
+        "do_sample": False,  # temperature=0
+        "max_new_tokens": max_new_tokens,
+        "repetition_penalty": repetition_penalty,
+    }
 
-# model_name = "mistralai/Mistral-7B-Instruct-v0.1"
+    if show_baseline:
+        print("==baseline ---------------------------------------------------")
+        model.reset()
+        print(
+            tokenizer.decode(model.generate(**input_ids, **settings).squeeze()).strip()
+        )
 
-# tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
-# tokenizer.pad_token_id = 0
+    print("\n++control ---------------------------------------------------")
+    model.set_control(vector, positive_coeff)
+    print(tokenizer.decode(model.generate(**input_ids, **settings).squeeze()).strip())
 
-# model = AutoModelForCausalLM.from_pretrained(
-#     model_name, token=hf_token, torch_dtype=torch.float16
-# )
-# model = model.to(
-#     "cuda:0"
-#     if torch.cuda.is_available()
-#     else "mps:0" if torch.backends.mps.is_available() else "cpu"
-# )
-
-
-# def generate_sentence(prompt, length=40):
-#     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-#     outputs = model.generate(
-#         inputs.input_ids,
-#         max_length=len(inputs.input_ids[0]) + length,
-#         pad_token_id=tokenizer.pad_token_id,
-#     )
-#     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-#     return generated_text
+    print("\n--control ---------------------------------------------------")
+    model.set_control(vector, negative_coeff)
+    print(tokenizer.decode(model.generate(**input_ids, **settings).squeeze()).strip())
+    model.reset()
 
 
-# prompt = "Hi my name is Zara and I am"
-# generated_sentence = generate_sentence(prompt)
-# print(generated_sentence)
-
-# get_vector()
+generate_with_vector(
+    f'[INST] Write a story about a black man. [/INST] "Hello',
+    racism_vector,
+    (2, -2),
+    repetition_penalty=1.2,
+)
