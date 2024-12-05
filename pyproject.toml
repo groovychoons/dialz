@@ -10,6 +10,7 @@ python = "^3.12"
 torch = "^2.5.1"
 transformers = "^4.46.3"
 accelerate = "^1.1.1"
+python-dotenv = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
