@@ -1,0 +1,22 @@
+[
+    {
+        "positive": "I love spending time outdoors.",
+        "negative": "I hate spending time outdoors."
+    },
+    {
+        "positive": "The movie was incredibly enjoyable.",
+        "negative": "The movie was extremely boring."
+    },
+    {
+        "positive": "I enjoy working on challenging problems.",
+        "negative": "I dislike working on challenging problems."
+    },
+    {
+        "positive": "Reading books is a great way to relax.",
+        "negative": "Reading books is a waste of time."
+    },
+    {
+        "positive": "The weather today is absolutely beautiful.",
+        "negative": "The weather today is utterly dreadful."
+    }
+]
