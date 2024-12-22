@@ -26,6 +26,7 @@ model = model.to(
     if torch.cuda.is_available()
     else "mps:0" if torch.backends.mps.is_available() else "cpu"
 )
+
 model = ControlModel(model, list(range(-5, -18, -1)))
 
 racism_vector = ControlVector.train(model, tokenizer, corpus_dataset)
