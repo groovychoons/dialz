@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dialz"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["groovychoons <siddiquezs2@cardiff.ac.uk>"]
 readme = "README.md"
@@ -11,6 +11,7 @@ torch = "^2.5.1"
 transformers = "^4.46.3"
 accelerate = "^1.1.1"
 python-dotenv = "^1.0.1"
+gguf = "0.13.0"
 
 
 [tool.poetry.group.dev.dependencies]
