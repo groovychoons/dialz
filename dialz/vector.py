@@ -6,7 +6,7 @@ import gguf
 import numpy as np
 from sklearn.decomposition import PCA
 import torch
-from transformers import PreTrainedModel, PreTrainedTokenizerBase
+from transformers import PreTrainedModel, PreTrainedTokenizerBase, AutoTokenizer
 from dataclasses import dataclass
 import tqdm
 
@@ -23,7 +23,6 @@ class ControlVector:
     def train(
         cls,
         model: "PreTrainedModel | ControlModel",
-        tokenizer: PreTrainedTokenizerBase,
         dataset: list[DatasetEntry],
         **kwargs,
     ) -> "ControlVector":
@@ -43,6 +42,9 @@ class ControlVector:
         Returns:
             ControlVector: The trained vector.
         """
+        tokenizer = AutoTokenizer.from_pretrained(model.model_name, token=model.token)
+        tokenizer.pad_token_id = 0
+
         with torch.inference_mode():
             dirs = read_representations(
                 model,

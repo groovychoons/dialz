@@ -1,8 +1,13 @@
-from dataclasses import dataclass
-from typing import List
 import json
 import os
 
+from dataclasses import dataclass
+from typing import List
+from dotenv import load_dotenv
+from transformers import AutoTokenizer
+
+load_dotenv()
+hf_token = os.getenv("HF_TOKEN")
 
 @dataclass
 class DatasetEntry:
@@ -73,6 +78,65 @@ class Dataset:
         with open(file_path, "w") as file:
             json.dump([entry.__dict__ for entry in self.entries], file, indent=4)
 
+
+    @staticmethod
+    def _apply_chat_template(
+        tokenizer, 
+        system_role: str, 
+        content1: str, 
+        content2: str,
+        add_generation_prompt: bool = True
+    ) -> str:
+        """
+        Applies the chat template to the given content and returns the decoded output.
+        """
+        messages = []
+
+        # Only add system message if system_role is non-empty
+        if system_role:
+            messages.append({"role": "system", "content": f"{system_role}{content1}."})
+
+        messages.append({"role": "user", "content": content2})
+        
+        tokenized = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=add_generation_prompt,
+            return_tensors="pt",
+        )
+        return tokenized
+
+
+    @classmethod
+    def create_dataset(
+        cls, 
+        model_name: str, 
+        items: list, 
+        prompt_type: str = "generic", 
+        num_sents: int = 10,
+        system_role: str = "Act as if you are extremely "
+    ) -> "Dataset":
+
+        tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+
+        file_path = os.path.join(os.path.dirname(__file__), "corpus", f"{prompt_type}.json")
+        with open(file_path, "r", encoding="utf-8") as file:
+            variations = json.load(file)
+
+        dataset = Dataset()
+
+        for variation in variations[:num_sents]:
+            # Use the helper function for both positive and negative
+            positive_decoded = cls._apply_chat_template(tokenizer, system_role, items[0], variation)
+            negative_decoded = cls._apply_chat_template(tokenizer, system_role, items[1], variation)
+
+            # Add to dataset
+            dataset.add_entry(positive_decoded, negative_decoded)
+
+        return dataset
+
+
     @classmethod
     def load_from_file(cls, file_path: str) -> "Dataset":
         """
@@ -91,28 +155,51 @@ class Dataset:
         return dataset
 
     @classmethod
-    def load_corpus(cls, name: str) -> "Dataset":
+    def load_corpus(
+        cls, 
+        model_name: str, 
+        name: str, 
+        num_sents: int = 10
+    ) -> "Dataset":
         """
-        Loads a default pre-saved corpus included in the package.
-
-        Args:
-            name (str): The name of the pre-saved corpus to load.
-
-        Returns:
-            Dataset: A new Dataset instance with the default corpus.
-
-        Raises:
-            FileNotFoundError: If the specified corpus does not exist.
+        Loads a default pre-saved corpus included in the package,
+        re-applies chat templates to each entry, and limits to num_sents.
         """
-        # Assuming pre-saved corpora are stored in a 'corpus' folder in the
-        # package
         base_path = os.path.join(os.path.dirname(__file__), "corpus")
         file_path = os.path.join(base_path, f"{name}.json")
 
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"Corpus '{name}' not found.")
 
-        return cls.load_from_file(file_path)
+        # 1. Load the raw data (list of dicts with "positive" and "negative")
+        with open(file_path, "r", encoding="utf-8") as file:
+            raw_entries = json.load(file)
+
+        # 2. Initialize tokenizer
+        tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+
+        # 3. Create a new dataset to store the transformed entries
+        processed_dataset = cls()
+
+        # 4. Iterate through the first num_sents entries, apply templates
+        for entry in raw_entries[:num_sents]:
+            positive_transformed = cls._apply_chat_template(
+                tokenizer,
+                system_role="",
+                content1="",
+                content2=entry["positive"]
+            )
+            negative_transformed = cls._apply_chat_template(
+                tokenizer,
+                system_role="",
+                content1="",
+                content2=entry["negative"]
+            )
+            processed_dataset.add_entry(positive_transformed, negative_transformed)
+
+        return processed_dataset
+
 
     def __str__(self) -> str:
         """
@@ -120,7 +207,7 @@ class Dataset:
         """
         return "\n".join(
             [
-                f"Positive: {entry.positive}, Negative: {entry.negative}"
+                f"Positive: {entry.positive}\nNegative: {entry.negative}"
                 for entry in self.entries
             ]
         )

@@ -3,7 +3,7 @@ import typing
 import warnings
 
 import torch
-from transformers import PretrainedConfig, PreTrainedModel
+from transformers import PretrainedConfig, PreTrainedModel, AutoModelForCausalLM
 
 if typing.TYPE_CHECKING:
     from .vector import ControlVector
@@ -16,7 +16,7 @@ class ControlModel(torch.nn.Module):
     A wrapped language model that can have controls set on its layers with `self.set_control`.
     """
 
-    def __init__(self, model: PreTrainedModel, layer_ids: typing.Iterable[int]):
+    def __init__(self, model_name: str, layer_ids: typing.Iterable[int], token: str = None):
         """
         **This mutates the wrapped `model`! Be careful using `model` after passing it to this class.**
 
@@ -25,9 +25,20 @@ class ControlModel(torch.nn.Module):
         """
 
         super().__init__()
-        self.model = model
+        self.model_name = model_name
+        print("model_name", model_name)
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.model_name, token=token, torch_dtype=torch.float16
+        )
+        self.token = token
 
-        layers = model_layer_list(model)
+        self.model = self.model.to(
+            "cuda:0"
+            if torch.cuda.is_available()
+            else "mps:0" if torch.backends.mps.is_available() else "cpu"
+        )
+
+        layers = model_layer_list(self.model)
         self.layer_ids = [i if i >= 0 else len(layers) + i for i in layer_ids]
         for layer_id in layer_ids:
             layer = layers[layer_id]
