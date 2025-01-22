@@ -3,7 +3,12 @@ import typing
 import warnings
 
 import torch
-from transformers import PretrainedConfig, PreTrainedModel, AutoModelForCausalLM
+from transformers import (
+    PretrainedConfig,
+    PreTrainedModel,
+    AutoTokenizer,
+    AutoModelForCausalLM,
+)
 
 if typing.TYPE_CHECKING:
     from .vector import ControlVector
@@ -16,7 +21,9 @@ class ControlModel(torch.nn.Module):
     A wrapped language model that can have controls set on its layers with `self.set_control`.
     """
 
-    def __init__(self, model_name: str, layer_ids: typing.Iterable[int], token: str = None):
+    def __init__(
+        self, model_name: str, layer_ids: typing.Iterable[int], token: str = None
+    ):
         """
         **This mutates the wrapped `model`! Be careful using `model` after passing it to this class.**
 
@@ -26,7 +33,7 @@ class ControlModel(torch.nn.Module):
 
         super().__init__()
         self.model_name = model_name
-        print("model_name", model_name)
+
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_name, token=token, torch_dtype=torch.float16
         )
@@ -131,6 +138,214 @@ class ControlModel(torch.nn.Module):
     def __call__(self, *args, **kwargs):
         return self.model(*args, **kwargs)
 
+    def visualize_activation(
+        self,
+        input_text: str,
+        control_vector: "ControlVector",
+        layer_index: int = None,
+    ) -> str:
+        """
+        Uses offset mappings to preserve the exact original text spacing.
+        Token i is colored by the alignment (dot product) from token (i+1).
+        If i+1 is out of range, we default that token's color to white.
+        """
+        self.reset()
+
+        # 2) Pick the layer to hook
+        if layer_index is None:
+            if not self.layer_ids:
+                raise ValueError("No layer_ids set on this model!")
+            layer_index = self.layer_ids[-1]
+
+        # We'll store the hidden states from the chosen layer in a HookState.
+        @dataclasses.dataclass
+        class HookState:
+            hidden: torch.Tensor = None  # shape [batch, seq_len, hidden_dim]
+
+        hook_state = HookState()
+
+        def hook_fn(module, inp, out):
+            if isinstance(out, tuple):
+                hook_state.hidden = out[0]
+            else:
+                hook_state.hidden = out
+
+        # Identify the layer module and attach a forward hook
+        def model_layer_list(m):
+            if hasattr(m, "model"):
+                return m.model.layers
+            elif hasattr(m, "transformer"):
+                return m.transformer.h
+            else:
+                raise ValueError("Cannot locate layers for this model type")
+
+        layers = model_layer_list(self.model)
+        real_layer_index = (
+            layer_index if layer_index >= 0 else len(layers) + layer_index
+        )
+        layers[real_layer_index].register_forward_hook(hook_fn)
+
+        # 3) Tokenize with offset mappings
+        tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        encoded = tokenizer(
+            input_text,
+            return_tensors="pt",
+            return_offsets_mapping=True,  # so we can preserve original text slices
+            add_special_tokens=False,
+        )
+        input_ids = encoded["input_ids"].to(self.device)
+        offset_mapping = encoded["offset_mapping"][
+            0
+        ].tolist()  # list of (start, end) for each token
+
+        # 4) Forward pass to capture hidden states
+        with torch.no_grad():
+            _ = self.model(input_ids)
+
+        if hook_state.hidden is None:
+            raise RuntimeError("Did not capture hidden states in the forward pass!")
+
+        # shape: (seq_len, hidden_dim)
+        hidden_states = hook_state.hidden[0]
+
+        # 5) Get the raw direction from the control vector
+        if layer_index not in control_vector.directions:
+            raise ValueError(
+                f"No direction for layer {layer_index} in the control vector!"
+            )
+        direction_np = control_vector.directions[layer_index]
+        direction = torch.tensor(
+            direction_np, dtype=self.model.dtype, device=self.device
+        )
+
+        # 6) Compute dot product for each token *with index+1*
+        #    We'll store them in a list the same length as hidden_states.
+        seq_len = hidden_states.size(0)
+        scores = []
+        for i in range(seq_len):
+            next_idx = i + 1
+            if next_idx < seq_len:
+                dot_val = torch.dot(hidden_states[next_idx], direction).item()
+            else:
+                # If next_idx is out of range, default to 0 => white color
+                dot_val = 0.0
+            scores.append(dot_val)
+
+        # 7) Build the final colored string using offset mappings
+        colored_text = ""
+        for (start, end), score in zip(offset_mapping, scores):
+            substring = input_text[start:end]  # exact slice of the original text
+            color_prefix = color_token(score)  # your existing gradient function
+            reset_code = "\033[0m"
+            colored_text += f"{color_prefix}{substring}{reset_code}"
+
+        return colored_text
+
+    def get_activation_score(
+        self,
+        input_text: str,
+        control_vector: "ControlVector",
+        layer_index: int = None,
+        aggregate: str = "mean",
+    ) -> float:
+        """
+        Returns a single scalar "activation score" for the entire input_text,
+        measured by projecting the hidden states of a chosen layer onto the
+        given control_vector, then aggregating (mean or sum) over all tokens.
+
+        :param input_text: The input string to evaluate
+        :param control_vector: A ControlVector containing direction(s)
+        :param layer_index: If None, defaults to the last controlled layer in self.layer_ids
+        :param aggregate: either "mean" or "sum" to combine per-token projections
+        :return: A single float representing how strongly the entire input_text
+                aligns with the control_vector direction on the chosen layer.
+        """
+        import torch
+        from dataclasses import dataclass
+        from transformers import AutoTokenizer
+
+        # 1) Ensure no control is applied, unless you'd prefer to measure
+        #    alignment *after* applying control. We'll measure base hidden states here:
+        self.reset()
+
+        # 2) If layer_index is not provided, default to last in self.layer_ids
+        if layer_index is None:
+            if not self.layer_ids:
+                raise ValueError("No controlled layers set on this model!")
+            layer_index = self.layer_ids[-1]
+
+        # 3) We'll store the captured hidden states in a small container:
+        @dataclass
+        class HookState:
+            hidden: torch.Tensor = None  # shape [batch=1, seq_len, hidden_dim]
+
+        hook_state = HookState()
+
+        def hook_fn(module, inp, out):
+            # If out is a tuple (hidden, present, ...):
+            if isinstance(out, tuple):
+                hook_state.hidden = out[0]
+            else:
+                hook_state.hidden = out
+
+        # 4) Identify the correct layer in the underlying model and attach a forward hook
+        def model_layer_list(m):
+            if hasattr(m, "model"):
+                return m.model.layers
+            elif hasattr(m, "transformer"):
+                return m.transformer.h
+            else:
+                raise ValueError("Cannot locate layers for this model type")
+
+        layers = model_layer_list(self.model)
+        real_layer_idx = layer_index if layer_index >= 0 else len(layers) + layer_index
+        layers[real_layer_idx].register_forward_hook(hook_fn)
+
+        # 5) Build a tokenizer from the model name (as you requested)
+        tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        # Some models require a pad_token, especially if you do batch processing or
+        # if your model doesn't have a default pad token:
+        if tokenizer.pad_token_id is None:
+            tokenizer.pad_token_id = tokenizer.eos_token_id or 0
+
+        # 6) Encode and forward pass
+        encoded = tokenizer(input_text, return_tensors="pt", add_special_tokens=False)
+        input_ids = encoded["input_ids"].to(self.device)
+
+        with torch.no_grad():
+            _ = self.model(input_ids)
+
+        # 7) Check we got the hidden states
+        if hook_state.hidden is None:
+            raise RuntimeError("Did not capture hidden states in the forward pass!")
+
+        # shape (seq_len, hidden_dim)
+        hidden_states = hook_state.hidden[0]  # single batch => shape [seq_len, dim]
+        seq_len, hidden_dim = hidden_states.shape
+
+        # 8) Grab the direction from the control_vector, no scaling
+        if layer_index not in control_vector.directions:
+            raise ValueError(f"No direction for layer {layer_index} in control_vector!")
+        direction_np = control_vector.directions[layer_index]
+        direction = torch.tensor(
+            direction_np, device=self.device, dtype=self.model.dtype
+        )
+
+        # 9) Project each token's hidden state onto direction => shape [seq_len]
+        #    We'll do (hidden_states @ direction) => shape [seq_len]
+        #    If the direction is dimension [hidden_dim], this works fine.
+        dot_vals = hidden_states @ direction
+
+        # 10) Aggregate
+        if aggregate == "mean":
+            score = dot_vals.mean().item()
+        elif aggregate == "sum":
+            score = dot_vals.sum().item()
+        else:
+            raise ValueError(f"Unknown aggregate: {aggregate}")
+
+        return score
+
 
 @dataclasses.dataclass
 class BlockControlParams:
@@ -218,3 +433,30 @@ def model_layer_list(model: ControlModel | PreTrainedModel) -> torch.nn.ModuleLi
         return model.transformer.h
     else:
         raise ValueError(f"don't know how to get layer list for {type(model)}")
+
+
+def color_token(score: float) -> str:
+    """
+    Returns the token colored with a 24-bit ANSI code that smoothly
+    interpolates from:
+        - score = -1 => (255, 0, 0)     [red]
+        - score =  0 => (255, 255, 255) [white]
+        - score = +1 => (0, 0, 255)     [blue]
+    """
+
+    # Clamp score to [-1, 1]
+    s = max(-1.0, min(1.0, score))
+
+    if s >= 0.0:
+        # s in [0..1] goes from white -> blue
+        r = int(255 * (1.0 - s))
+        g = int(255 * (1.0 - s))
+        b = 255
+    else:
+        # s in [-1..0) goes from red -> white
+        fraction = s + 1.0
+        r = 255
+        g = int(255 * fraction)
+        b = int(255 * fraction)
+
+    return f"\033[38;2;{r};{g};{b}m"
