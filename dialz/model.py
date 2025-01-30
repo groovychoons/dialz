@@ -260,10 +260,6 @@ class ControlModel(torch.nn.Module):
         :return: A single float representing how strongly the entire input_text
                 aligns with the control_vector direction on the chosen layer.
         """
-        import torch
-        from dataclasses import dataclass
-        from transformers import AutoTokenizer
-
         # 1) Ensure no control is applied, unless you'd prefer to measure
         #    alignment *after* applying control. We'll measure base hidden states here:
         self.reset()
@@ -275,7 +271,7 @@ class ControlModel(torch.nn.Module):
             layer_index = self.layer_ids[-1]
 
         # 3) We'll store the captured hidden states in a small container:
-        @dataclass
+        @dataclasses.dataclass
         class HookState:
             hidden: torch.Tensor = None  # shape [batch=1, seq_len, hidden_dim]
 
