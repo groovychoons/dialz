@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dialz"
-version = "0.1.8"
+version = "0.1.9"
 description = ""
 authors = ["groovychoons <siddiquezs2@cardiff.ac.uk>"]
 readme = "README.md"
