@@ -245,46 +245,57 @@ class ControlModel(torch.nn.Module):
         self,
         input_text: str,
         control_vector: "ControlVector",
-        layer_index: int = None,
-        aggregate: str = "mean",
+        layer_index=None,  # can be int or list of ints
+        scoring_method: str = "default",  # 'default', 'last_token', 'max_token', or 'median_token'
     ) -> float:
         """
-        Returns a single scalar "activation score" for the entire input_text,
-        measured by projecting the hidden states of a chosen layer onto the
-        given control_vector, then aggregating (mean or sum) over all tokens.
+        Returns the activation score for the input_text by projecting hidden state(s)
+        onto the given control_vector direction(s) for the specified layer(s). If
+        multiple layers are provided, the activation scores are averaged.
 
-        :param input_text: The input string to evaluate
-        :param control_vector: A ControlVector containing direction(s)
-        :param layer_index: If None, defaults to the last controlled layer in self.layer_ids
-        :param aggregate: either "mean" or "sum" to combine per-token projections
-        :return: A single float representing how strongly the entire input_text
-                aligns with the control_vector direction on the chosen layer.
+        Scoring methods:
+            - 'default': Average the dot products over all tokens.
+            - 'last_token': Use only the dot product of the final token.
+            - 'max_token': Use the maximum dot product value among all tokens.
+            - 'median_token': Use the median of the dot product values among all tokens.
+
+        :param input_text: The input string to evaluate.
+        :param control_vector: A ControlVector containing direction(s) keyed by layer index.
+        :param layer_index: An int or a list of ints representing the layer(s) to use.
+                            If None, defaults to the last controlled layer in self.layer_ids.
+        :param scoring_method: A string specifying which scoring method to use.
+        :return: A single float representing the averaged activation score.
         """
-        # 1) Ensure no control is applied, unless you'd prefer to measure
-        #    alignment *after* applying control. We'll measure base hidden states here:
+        # 1) Reset the model to ensure no control is applied.
         self.reset()
 
-        # 2) If layer_index is not provided, default to last in self.layer_ids
+        # 2) Determine the layer(s) to use.
         if layer_index is None:
             if not self.layer_ids:
                 raise ValueError("No controlled layers set on this model!")
             layer_index = self.layer_ids[-1]
 
-        # 3) We'll store the captured hidden states in a small container:
-        @dataclasses.dataclass
-        class HookState:
-            hidden: torch.Tensor = None  # shape [batch=1, seq_len, hidden_dim]
+        # If a single int is provided, wrap it in a list for unified processing.
+        if not isinstance(layer_index, list):
+            layers_to_use = [layer_index]
+        else:
+            layers_to_use = layer_index
 
-        hook_state = HookState()
+        # 3) Prepare a container to store hidden states for each requested layer.
+        hook_states = {}
 
-        def hook_fn(module, inp, out):
-            # If out is a tuple (hidden, present, ...):
-            if isinstance(out, tuple):
-                hook_state.hidden = out[0]
-            else:
-                hook_state.hidden = out
+        # 4) Define and register a hook function for each layer.
+        def get_hook_fn(key):
+            def hook_fn(module, inp, out):
+                # If out is a tuple (hidden, present, ...), take the first element.
+                if isinstance(out, tuple):
+                    hook_states[key] = out[0]
+                else:
+                    hook_states[key] = out
 
-        # 4) Identify the correct layer in the underlying model and attach a forward hook
+            return hook_fn
+
+        # 5) Retrieve the list of layers from the model.
         def model_layer_list(m):
             if hasattr(m, "model"):
                 return m.model.layers
@@ -294,53 +305,70 @@ class ControlModel(torch.nn.Module):
                 raise ValueError("Cannot locate layers for this model type")
 
         layers = model_layer_list(self.model)
-        real_layer_idx = layer_index if layer_index >= 0 else len(layers) + layer_index
-        layers[real_layer_idx].register_forward_hook(hook_fn)
 
-        # 5) Build a tokenizer from the model name (as you requested)
+        # 6) For each provided layer index, compute its actual index and register the hook.
+        hooks = []
+        for li in layers_to_use:
+            real_layer_idx = li if li >= 0 else len(layers) + li
+            hook_handle = layers[real_layer_idx].register_forward_hook(get_hook_fn(li))
+            hooks.append(hook_handle)
+
+        # 7) Build a tokenizer from the model name.
         tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-        # Some models require a pad_token, especially if you do batch processing or
-        # if your model doesn't have a default pad token:
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token_id = tokenizer.eos_token_id or 0
 
-        # 6) Encode and forward pass
+        # 8) Encode the input text and perform a forward pass.
         encoded = tokenizer(input_text, return_tensors="pt", add_special_tokens=False)
         input_ids = encoded["input_ids"].to(self.device)
-
         with torch.no_grad():
             _ = self.model(input_ids)
 
-        # 7) Check we got the hidden states
-        if hook_state.hidden is None:
-            raise RuntimeError("Did not capture hidden states in the forward pass!")
+        # 9) Remove hooks to clean up.
+        for hook in hooks:
+            hook.remove()
 
-        # shape (seq_len, hidden_dim)
-        hidden_states = hook_state.hidden[0]  # single batch => shape [seq_len, dim]
-        seq_len, hidden_dim = hidden_states.shape
+        # 10) For each layer, compute the activation score using the chosen scoring method.
+        scores = []
+        for li in layers_to_use:
+            if li not in hook_states:
+                raise RuntimeError(
+                    f"Did not capture hidden states for layer {li} in the forward pass!"
+                )
+            # Extract hidden states for the single batch: shape [seq_len, hidden_dim]
+            hidden_states = hook_states[li][0]
+            # Retrieve the corresponding direction from the control_vector.
+            if li not in control_vector.directions:
+                raise ValueError(f"No direction for layer {li} in control_vector!")
+            direction_np = control_vector.directions[li]
+            direction = torch.tensor(
+                direction_np, device=self.device, dtype=self.model.dtype
+            )
 
-        # 8) Grab the direction from the control_vector, no scaling
-        if layer_index not in control_vector.directions:
-            raise ValueError(f"No direction for layer {layer_index} in control_vector!")
-        direction_np = control_vector.directions[layer_index]
-        direction = torch.tensor(
-            direction_np, device=self.device, dtype=self.model.dtype
-        )
+            # Compute dot products for all tokens: shape [seq_len]
+            dot_vals = hidden_states @ direction
 
-        # 9) Project each token's hidden state onto direction => shape [seq_len]
-        #    We'll do (hidden_states @ direction) => shape [seq_len]
-        #    If the direction is dimension [hidden_dim], this works fine.
-        dot_vals = hidden_states @ direction
+            # Determine score based on the scoring_method.
+            if scoring_method == "default":
+                # Average over all tokens.
+                score_tensor = dot_vals.mean()
+            elif scoring_method == "last_token":
+                # Use only the final token.
+                score_tensor = dot_vals[-1]
+            elif scoring_method == "max_token":
+                # Use the maximum token's dot product.
+                score_tensor = dot_vals.max()
+            elif scoring_method == "median_token":
+                # Use the median token's dot product.
+                score_tensor = dot_vals.median()
+            else:
+                raise ValueError(f"Unknown scoring_method: {scoring_method}")
 
-        # 10) Aggregate
-        if aggregate == "mean":
-            score = dot_vals.mean().item()
-        elif aggregate == "sum":
-            score = dot_vals.sum().item()
-        else:
-            raise ValueError(f"Unknown aggregate: {aggregate}")
+            scores.append(score_tensor.item())
 
-        return score
+        # 11) Average the scores across the selected layers.
+        avg_score = sum(scores) / len(scores)
+        return avg_score
 
 
 @dataclasses.dataclass
