@@ -1,5 +1,6 @@
 gguf==0.14.0
 pandas==2.2.3
+python-dotenv==1.0.1
 torch==2.6.0
 tqdm==4.67.1
 transformers==4.49.0
