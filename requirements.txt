@@ -5,4 +5,5 @@ torch==2.6.0
 tqdm==4.67.1
 transformers==4.49.0
 sphinx
+sphinx_autodoc_typehints
 furo
