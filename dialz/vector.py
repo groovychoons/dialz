@@ -10,27 +10,27 @@ from transformers import PreTrainedModel, PreTrainedTokenizerBase, AutoTokenizer
 from dataclasses import dataclass
 import tqdm
 
-from .model import ControlModel, model_layer_list
+from .model import SteeringModel, model_layer_list
 from .dataset import DatasetEntry
 
 
 @dataclass
-class ControlVector:
+class SteeringVector:
     model_type: str
     directions: dict[int, np.ndarray]
 
     @classmethod
     def train(
         cls,
-        model: "PreTrainedModel | ControlModel",
+        model: "PreTrainedModel | SteeringModel",
         dataset: list[DatasetEntry],
         **kwargs,
-    ) -> "ControlVector":
+    ) -> "SteeringVector":
         """
-        Train a ControlVector for a given model and tokenizer using the provided dataset.
+        Train a SteeringVector for a given model and tokenizer using the provided dataset.
 
         Args:
-            model (PreTrainedModel | ControlModel): The model to train against.
+            model (PreTrainedModel | SteeringModel): The model to train against.
             tokenizer (PreTrainedTokenizerBase): The tokenizer to tokenize the dataset.
             dataset (list[DatasetEntry]): The dataset used for training.
             **kwargs: Additional keyword arguments.
@@ -40,7 +40,7 @@ class ControlVector:
                     "pca_diff" or "pca_center". Defaults to "pca_diff".
 
         Returns:
-            ControlVector: The trained vector.
+            SteeringVector: The trained vector.
         """
         tokenizer = AutoTokenizer.from_pretrained(model.model_name, token=model.token)
         tokenizer.pad_token_id = 0
@@ -56,17 +56,17 @@ class ControlVector:
 
     def export_gguf(self, path: os.PathLike[str] | str):
         """
-        Export a trained ControlVector to a llama.cpp .gguf file.
+        Export a trained SteeringVector to a llama.cpp .gguf file.
         Note: This file can't be used with llama.cpp yet. WIP!
 
         ```python
-        vector = ControlVector.train(...)
+        vector = SteeringVector.train(...)
         vector.export_gguf("path/to/write/vector.gguf")
         ```
         ```
         """
 
-        arch = "controlvector"
+        arch = "steeringvector"
         writer = gguf.GGUFWriter(path, arch)
         writer.add_string(f"{arch}.model_hint", self.model_type)
         writer.add_uint32(f"{arch}.layer_count", len(self.directions))
@@ -78,7 +78,7 @@ class ControlVector:
         writer.close()
 
     @classmethod
-    def import_gguf(cls, path: os.PathLike[str] | str) -> "ControlVector":
+    def import_gguf(cls, path: os.PathLike[str] | str) -> "SteeringVector":
         reader = gguf.GGUFReader(path)
 
         archf = reader.get_field("general.architecture")
@@ -86,14 +86,14 @@ class ControlVector:
             warnings.warn(".gguf file missing architecture field")
         else:
             arch = str(bytes(archf.parts[-1]), encoding="utf-8", errors="replace")
-            if arch != "controlvector":
+            if arch != "steeringvector":
                 warnings.warn(
-                    f".gguf file with architecture {arch!r} does not appear to be a control vector!"
+                    f".gguf file with architecture {arch!r} does not appear to be a steering vector!"
                 )
 
-        modelf = reader.get_field("controlvector.model_hint")
+        modelf = reader.get_field("steeringvector.model_hint")
         if not modelf or not len(modelf.parts):
-            raise ValueError(".gguf file missing controlvector.model_hint field")
+            raise ValueError(".gguf file missing steeringvector.model_hint field")
         model_hint = str(bytes(modelf.parts[-1]), encoding="utf-8")
 
         directions = {}
@@ -111,8 +111,8 @@ class ControlVector:
         return cls(model_type=model_hint, directions=directions)
 
     def _helper_combine(
-        self, other: "ControlVector", other_coeff: float
-    ) -> "ControlVector":
+        self, other: "SteeringVector", other_coeff: float
+    ) -> "SteeringVector":
         if self.model_type != other.model_type:
             warnings.warn(
                 "Trying to add vectors with mismatched model_types together, this may produce unexpected results."
@@ -128,9 +128,9 @@ class ControlVector:
                 directions[layer] = directions[layer] + other_layer
             else:
                 directions[layer] = other_layer
-        return ControlVector(model_type=model_type, directions=directions)
+        return SteeringVector(model_type=model_type, directions=directions)
 
-    def __eq__(self, other: "ControlVector") -> bool:
+    def __eq__(self, other: "SteeringVector") -> bool:
         if self is other:
             return True
 
@@ -143,41 +143,41 @@ class ControlVector:
                 return False
         return True
 
-    def __add__(self, other: "ControlVector") -> "ControlVector":
-        if not isinstance(other, ControlVector):
+    def __add__(self, other: "SteeringVector") -> "SteeringVector":
+        if not isinstance(other, SteeringVector):
             raise TypeError(
-                f"Unsupported operand type(s) for +: 'ControlVector' and '{type(other).__name__}'"
+                f"Unsupported operand type(s) for +: 'SteeringVector' and '{type(other).__name__}'"
             )
         return self._helper_combine(other, 1)
 
-    def __sub__(self, other: "ControlVector") -> "ControlVector":
-        if not isinstance(other, ControlVector):
+    def __sub__(self, other: "SteeringVector") -> "SteeringVector":
+        if not isinstance(other, SteeringVector):
             raise TypeError(
-                f"Unsupported operand type(s) for -: 'ControlVector' and '{type(other).__name__}'"
+                f"Unsupported operand type(s) for -: 'SteeringVector' and '{type(other).__name__}'"
             )
         return self._helper_combine(other, -1)
 
-    def __neg__(self) -> "ControlVector":
+    def __neg__(self) -> "SteeringVector":
         directions: dict[int, np.ndarray] = {}
         for layer in self.directions:
             directions[layer] = -self.directions[layer]
-        return ControlVector(model_type=self.model_type, directions=directions)
+        return SteeringVector(model_type=self.model_type, directions=directions)
 
-    def __mul__(self, other: int | float | np.int_ | np.float64) -> "ControlVector":
+    def __mul__(self, other: int | float | np.int_ | np.float64) -> "SteeringVector":
         directions: dict[int, np.ndarray] = {}
         for layer in self.directions:
             directions[layer] = other * self.directions[layer]
-        return ControlVector(model_type=self.model_type, directions=directions)
+        return SteeringVector(model_type=self.model_type, directions=directions)
 
-    def __rmul__(self, other: int | float | np.int_ | np.float64) -> "ControlVector":
+    def __rmul__(self, other: int | float | np.int_ | np.float64) -> "SteeringVector":
         return self.__mul__(other)
 
-    def __truediv__(self, other: int | float | np.int_ | np.float64) -> "ControlVector":
+    def __truediv__(self, other: int | float | np.int_ | np.float64) -> "SteeringVector":
         return self.__mul__(1 / other)
 
 
 def read_representations(
-    model: "PreTrainedModel | ControlModel",
+    model: "PreTrainedModel | SteeringModel",
     tokenizer: PreTrainedTokenizerBase,
     inputs: list[DatasetEntry],
     hidden_layers: typing.Iterable[int] | None = None,

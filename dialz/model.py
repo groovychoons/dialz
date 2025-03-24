@@ -11,10 +11,10 @@ from transformers import (
 )
 
 if typing.TYPE_CHECKING:
-    from .vector import ControlVector
+    from .vector import SteeringVector
 
 
-class ControlModel(torch.nn.Module):
+class SteeringModel(torch.nn.Module):
     """
     **This mutates the wrapped `model`! Be careful using `model` after passing it to this class.**
 
@@ -27,7 +27,7 @@ class ControlModel(torch.nn.Module):
         """
         **This mutates the wrapped `model`! Be careful using `model` after passing it to this class.**
 
-        Build a new ControlModel around a model instance, initializing control on
+        Build a new SteeringModel around a model instance, initializing control on
         the layers specified in `layer_ids`.
         """
 
@@ -49,8 +49,8 @@ class ControlModel(torch.nn.Module):
         self.layer_ids = [i if i >= 0 else len(layers) + i for i in layer_ids]
         for layer_id in layer_ids:
             layer = layers[layer_id]
-            if not isinstance(layer, ControlModule):
-                layers[layer_id] = ControlModule(layer)
+            if not isinstance(layer, SteeringModule):
+                layers[layer_id] = SteeringModule(layer)
             else:
                 warnings.warn(
                     "Trying to rewrap a wrapped model! Probably not what you want! Try calling .unwrap first."
@@ -76,10 +76,10 @@ class ControlModel(torch.nn.Module):
         return self.model
 
     def set_control(
-        self, control: "ControlVector", coeff: float = 1.0, **kwargs
+        self, control: "SteeringVector", coeff: float = 1.0, **kwargs
     ) -> None:
         """
-        Set a `ControlVector` for the layers this ControlModel handles, with a strength given
+        Set a `SteeringVector` for the layers this SteeringModel handles, with a strength given
         by `coeff`. (Negative `coeff` values invert the control vector, e.g. happiness→sadness.)
         `coeff` defaults to `1.0`.
 
@@ -123,7 +123,7 @@ class ControlModel(torch.nn.Module):
 
         layers = model_layer_list(self.model)
         for layer_id in self.layer_ids:
-            layer: ControlModule = layers[layer_id]  # type: ignore
+            layer: SteeringModule = layers[layer_id]  # type: ignore
             if control is None:
                 layer.reset()
             else:
@@ -141,7 +141,7 @@ class ControlModel(torch.nn.Module):
     def visualize_activation(
         self,
         input_text: str,
-        control_vector: "ControlVector",
+        control_vector: "SteeringVector",
         layer_index: int = None,
     ) -> str:
         """
@@ -244,7 +244,7 @@ class ControlModel(torch.nn.Module):
     def get_activation_score(
         self,
         input_text: str,
-        control_vector: "ControlVector",
+        control_vector: "SteeringVector",
         layer_index=None,  # can be int or list of ints
         scoring_method: str = "default",  # 'default', 'last_token', 'max_token', or 'median_token'
     ) -> float:
@@ -384,7 +384,7 @@ class BlockControlParams:
         return cls()
 
 
-class ControlModule(torch.nn.Module):
+class SteeringModule(torch.nn.Module):
     def __init__(self, block: torch.nn.Module) -> None:
         super().__init__()
         self.block: torch.nn.Module = block
@@ -447,8 +447,8 @@ class ControlModule(torch.nn.Module):
         return output
 
 
-def model_layer_list(model: ControlModel | PreTrainedModel) -> torch.nn.ModuleList:
-    if isinstance(model, ControlModel):
+def model_layer_list(model: SteeringModel | PreTrainedModel) -> torch.nn.ModuleList:
+    if isinstance(model, SteeringModel):
         model = model.model
 
     if hasattr(model, "model"):  # mistral-like
