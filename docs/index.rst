@@ -19,10 +19,16 @@ Releases are hosted on `PyPI`_, and can be installed using `pip` as below:
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    Home<self>
-   datasets
+
+
+.. toctree::
+   :maxdepth: 1
+   :caption: API Docs
+
+   api/datasets
 
 
 .. toctree::
