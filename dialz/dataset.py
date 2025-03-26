@@ -112,8 +112,8 @@ class Dataset:
         cls, 
         model_name: str, 
         items: list, 
-        prompt_type: str = "generic", 
-        num_sents: int = 10,
+        prompt_type: str = "starters", 
+        num_sents: int = 300,
         system_role: str = "Act as if you are extremely "
     ) -> "Dataset":
 
@@ -159,7 +159,7 @@ class Dataset:
         cls, 
         model_name: str, 
         name: str, 
-        num_sents: int = 10
+        num_sents: int = 300
     ) -> "Dataset":
         """
         Loads a default pre-saved corpus included in the package,
