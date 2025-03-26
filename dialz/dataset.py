@@ -109,18 +109,41 @@ class Dataset:
 
     @classmethod
     def create_dataset(
+
         cls, 
         model_name: str, 
-        items: list, 
-        prompt_type: str = "starters", 
+        contrastive_pair: list, 
+        system_role: str = "Act as if you are extremely ",
+        prompt_type: str = "sentence-starters", 
         num_sents: int = 300,
-        system_role: str = "Act as if you are extremely "
     ) -> "Dataset":
+
+        """
+        Creates a dataset by generating positive and negative examples based on a given model, 
+        contrastive pairs, and prompt variations.
+        This function uses a tokenizer to process input prompts and applies a chat template 
+        to generate positive and negative examples for each variation. The resulting examples 
+        are added to a dataset object.
+        Args:
+            cls: The class instance (used for accessing class methods).
+            model_name (str): The name of the pre-trained model to use for tokenization.
+            contrastive_pair (list): A list containing two elements representing the 
+                positive and negative contrastive pairs.
+            system_role (str, optional): A string representing the system's role in the 
+                chat template. Defaults to "Act as if you are extremely ".
+            prompt_type (str, optional): The type of prompt variations to use. Defaults to "sentence-starters".
+            num_sents (int, optional): The number of prompt variations to process. Defaults to 300.
+        Returns:
+            Dataset: A dataset object containing the generated positive and negative examples.
+        Raises:
+            FileNotFoundError: If the specified prompt variations file does not exist.
+            json.JSONDecodeError: If the prompt variations file is not a valid JSON file.
+        """
 
         tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
         tokenizer.pad_token_id = tokenizer.eos_token_id
 
-        file_path = os.path.join(os.path.dirname(__file__), "corpus", f"{prompt_type}.json")
+        file_path = os.path.join(os.path.dirname(__file__), "datasets", "create", f"{prompt_type}.json")
         with open(file_path, "r", encoding="utf-8") as file:
             variations = json.load(file)
 
@@ -128,8 +151,8 @@ class Dataset:
 
         for variation in variations[:num_sents]:
             # Use the helper function for both positive and negative
-            positive_decoded = cls._apply_chat_template(tokenizer, system_role, items[0], variation)
-            negative_decoded = cls._apply_chat_template(tokenizer, system_role, items[1], variation)
+            positive_decoded = cls._apply_chat_template(tokenizer, system_role, contrastive_pair[0], variation)
+            negative_decoded = cls._apply_chat_template(tokenizer, system_role, contrastive_pair[1], variation)
 
             # Add to dataset
             dataset.add_entry(positive_decoded, negative_decoded)
@@ -165,7 +188,7 @@ class Dataset:
         Loads a default pre-saved corpus included in the package,
         re-applies chat templates to each entry, and limits to num_sents.
         """
-        base_path = os.path.join(os.path.dirname(__file__), "corpus")
+        base_path = os.path.join(os.path.dirname(__file__), "datasets", "load")
         file_path = os.path.join(base_path, f"{name}.json")
 
         if not os.path.exists(file_path):
@@ -211,3 +234,24 @@ class Dataset:
                 for entry in self.entries
             ]
         )
+
+    def __getitem__(self, index: int) -> DatasetEntry:
+        """
+        Allows indexing into the dataset to retrieve a specific entry.
+
+        Args:
+            index (int): The index of the entry to retrieve.
+
+        Returns:
+            DatasetEntry: The dataset entry at the specified index.
+        """
+        return self.entries[index]
+
+    def __len__(self) -> int:
+        """
+        Returns the number of entries in the dataset.
+
+        Returns:
+            int: The number of entries in the dataset.
+        """
+        return len(self.entries)
