@@ -1,4 +1,5 @@
-from . import dataset, vector, model
+from . import dataset, vector, score, visualize
 from .dataset import Dataset
-from .model import SteeringModel
-from .vector import SteeringVector
+from .vector import SteeringModel, SteeringVector
+from .score import get_activation_score
+from .visualize import visualize_activation

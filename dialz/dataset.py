@@ -124,13 +124,12 @@ class Dataset:
         This function uses a tokenizer to process input prompts and applies a chat template 
         to generate positive and negative examples for each variation. The resulting examples 
         are added to a dataset object.
+        
         Args:
             cls: The class instance (used for accessing class methods).
             model_name (str): The name of the pre-trained model to use for tokenization.
-            contrastive_pair (list): A list containing two elements representing the 
-                positive and negative contrastive pairs.
-            system_role (str, optional): A string representing the system's role in the 
-                chat template. Defaults to "Act as if you are extremely ".
+            contrastive_pair (list): A list containing two elements representing the positive and negative contrastive pairs.
+            system_role (str, optional): A string representing the system's role in the chat template. Defaults to "Act as if you are extremely ".
             prompt_type (str, optional): The type of prompt variations to use. Defaults to "sentence-starters".
             num_sents (int, optional): The number of prompt variations to process. Defaults to 300.
         Returns:

@@ -29,7 +29,9 @@ Releases are hosted on `PyPI`_, and can be installed using `pip` as below:
    :caption: API Docs
 
    api/datasets
-
+   api/vectors
+   api/score
+   api/visualize
 
 .. toctree::
    :caption: Project Links
