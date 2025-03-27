@@ -3,7 +3,7 @@
 
 # Dialz: A Python Toolkit for Steering Vectors
 
-Docs: [https://groovychoons.github.io/dialz/](https://cardiffnlp.github.io/dialz/)
+Docs: [https://cardiffnlp.github.io/dialz/](https://cardiffnlp.github.io/dialz/)
 
 ## About
 
