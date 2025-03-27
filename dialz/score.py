@@ -13,7 +13,7 @@ def get_activation_score(
     model: "SteeringModel",
     control_vector: "SteeringVector",
     layer_index=None,  # can be int or list of ints
-    scoring_method: str = "default",  # 'default', 'last_token', 'max_token', or 'median_token'
+    scoring_method: str = "mean",  # 'mean', 'final_token', 'max_token', or 'median_token'
 ) -> float:
     """
     Returns the activation score for the input_text by projecting hidden state(s)
@@ -21,8 +21,8 @@ def get_activation_score(
     multiple layers are provided, the activation scores are averaged.
 
     Scoring methods:
-        - 'default': Average the dot products over all tokens.
-        - 'last_token': Use only the dot product of the final token.
+        - 'mean': Average the dot products over all tokens.
+        - 'final_token': Use only the dot product of the final token.
         - 'max_token': Use the maximum dot product value among all tokens.
         - 'median_token': Use the median of the dot product values among all tokens.
 
@@ -116,10 +116,10 @@ def get_activation_score(
         dot_vals = hidden_states @ direction
 
         # Determine score based on the scoring_method.
-        if scoring_method == "default":
+        if scoring_method == "mean":
             # Average over all tokens.
             score_tensor = dot_vals.mean()
-        elif scoring_method == "last_token":
+        elif scoring_method == "final_token":
             # Use only the final token.
             score_tensor = dot_vals[-1]
         elif scoring_method == "max_token":

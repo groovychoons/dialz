@@ -1,48 +1,99 @@
-import typing
-import warnings
-
+from IPython.display import HTML, display
 import torch
 from transformers import AutoTokenizer
 from dataclasses import dataclass
 
-if typing.TYPE_CHECKING:
-    from .vector import SteeringVector, SteeringModel
 
+def html_value_to_color(val: float, vmin: float, vmax: float) -> str:
+    """
+    Map a score to a red→white→turquoise CSS color.
+    
+    For a value of vmin the color is a vibrant red (#FF6666), at 0 it is white,
+    and at vmax it transitions to a turquoise (#40E0D0).
+    """
+    # Normalize value into [0, 1]
+    norm = (val - vmin) / (vmax - vmin)
+    if norm < 0.5:
+        # Interpolate from red (#FF6666) to white (#FFFFFF)
+        ratio = norm / 0.5
+        r = 255
+        g = int(102 + 153 * ratio)
+        b = int(102 + 153 * ratio)
+    else:
+        # Interpolate from white (#FFFFFF) to turquoise (#40E0D0)
+        ratio = (norm - 0.5) / 0.5
+        r = int(255 - 191 * ratio)  # 255 -> 64
+        g = int(255 - 31 * ratio)   # 255 -> 224
+        b = int(255 - 47 * ratio)   # 255 -> 208
+    return f"rgb({r},{g},{b})"
+
+def highlight_token(score: float) -> str:
+    """
+    Generate an ANSI escape code to highlight the background of a token
+    with black text. Uses a simple interpolation for the background.
+    """
+    s = max(-1.0, min(1.0, score))
+    if s >= 0.0:
+        r = int(255 * (1.0 - s))
+        g = int(255 * (1.0 - s))
+        b = 255
+    else:
+        fraction = s + 1.0
+        r = 255
+        g = int(255 * fraction)
+        b = int(255 * fraction)
+    return f"\033[48;2;{r};{g};{b}m\033[38;2;0;0;0m"
 
 def visualize_activation(
     input_text: str,
     model: "SteeringModel",
     control_vector: "SteeringVector",
     layer_index: int = None,
-) -> str:
+    mode: str = "ansi",  # "ansi" or "html"
+    show_score: bool = False
+) -> str | HTML:
     """
-    Uses offset mappings to preserve the exact original text spacing.
-    Token i is colored by the alignment (dot product) from token (i+1).
-    If i+1 is out of range, we default that token's color to white.
+    Visualize the model's activations by highlighting the background behind each token,
+    based on the dot product of the hidden state of token (i+1) and a control vector.
+
+    The output can be rendered as ANSI escape codes (for console use) or as HTML (for
+    Jupyter notebooks). In HTML mode, a red→white→turquoise gradient is used with
+    black text.
+
+    :param input_text: The original input text.
+    :param model: The steering model used for evaluation.
+    :param control_vector: The steering vector (control direction) to project onto.
+    :param layer_index: The index of the layer from which to extract hidden states.
+                        If not provided, the last layer in model.layer_ids is used.
+    :param mode: "ansi" for terminal output, "html" for an HTML snippet.
+    :param show_score: If True, display the numerical score alongside each token.
+    :return: A string (ANSI) or an IPython.display.HTML object with the highlighted text.
     """
+    # Reset the model so no control is applied.
     model.reset()
 
-    # 2) Pick the layer to hook
+    # Choose the layer to hook. Use the last controlled layer if not provided.
     if layer_index is None:
         if not model.layer_ids:
             raise ValueError("No layer_ids set on this model!")
         layer_index = model.layer_ids[-1]
 
-    # We'll store the hidden states from the chosen layer in a HookState.
     @dataclass
     class HookState:
-        hidden: torch.Tensor = None  # shape [batch, seq_len, hidden_dim]
+        hidden: torch.Tensor = None  # Shape: [batch, seq_len, hidden_dim]
 
     hook_state = HookState()
 
     def hook_fn(module, inp, out):
-        if isinstance(out, tuple):
-            hook_state.hidden = out[0]
-        else:
-            hook_state.hidden = out
+        """
+        A forward hook to capture hidden states from the selected layer.
+        """
+        hook_state.hidden = out[0] if isinstance(out, tuple) else out
 
-    # Identify the layer module and attach a forward hook
     def model_layer_list(m):
+        """
+        Retrieve the list of layers from the model.
+        """
         if hasattr(m, "model"):
             return m.model.layers
         elif hasattr(m, "transformer"):
@@ -51,92 +102,63 @@ def visualize_activation(
             raise ValueError("Cannot locate layers for this model type")
 
     layers = model_layer_list(model.model)
-    real_layer_index = (
-        layer_index if layer_index >= 0 else len(layers) + layer_index
-    )
-    layers[real_layer_index].register_forward_hook(hook_fn)
+    real_idx = layer_index if layer_index >= 0 else len(layers) + layer_index
+    hook_handle = layers[real_idx].register_forward_hook(hook_fn)
 
-    # 3) Tokenize with offset mappings
+    # Tokenize the input text and obtain offset mappings.
     tokenizer = AutoTokenizer.from_pretrained(model.model_name)
     encoded = tokenizer(
         input_text,
         return_tensors="pt",
-        return_offsets_mapping=True,  # so we can preserve original text slices
+        return_offsets_mapping=True,
         add_special_tokens=False,
     )
     input_ids = encoded["input_ids"].to(model.device)
-    offset_mapping = encoded["offset_mapping"][
-        0
-    ].tolist()  # list of (start, end) for each token
+    offsets = encoded["offset_mapping"][0].tolist()  # List of (start, end) pairs
 
-    # 4) Forward pass to capture hidden states
+    # Forward pass to capture hidden states.
     with torch.no_grad():
         _ = model.model(input_ids)
+    hook_handle.remove()
 
     if hook_state.hidden is None:
         raise RuntimeError("Did not capture hidden states in the forward pass!")
+    hidden = hook_state.hidden[0]
 
-    # shape: (seq_len, hidden_dim)
-    hidden_states = hook_state.hidden[0]
-
-    # 5) Get the raw direction from the control vector
+    # Retrieve the control direction.
     if layer_index not in control_vector.directions:
-        raise ValueError(
-            f"No direction for layer {layer_index} in the control vector!"
-        )
-    direction_np = control_vector.directions[layer_index]
+        raise ValueError(f"No direction for layer {layer_index} in the control vector!")
     direction = torch.tensor(
-        direction_np, dtype=model.model.dtype, device=model.device
+        control_vector.directions[layer_index],
+        device=model.device,
+        dtype=hidden.dtype,
     )
 
-    # 6) Compute dot product for each token *with index+1*
-    #    We'll store them in a list the same length as hidden_states.
-    seq_len = hidden_states.size(0)
+    # Compute dot products for each token using the hidden state of token i+1.
+    seq_len = hidden.size(0)
     scores = []
     for i in range(seq_len):
         next_idx = i + 1
-        if next_idx < seq_len:
-            dot_val = torch.dot(hidden_states[next_idx], direction).item()
-        else:
-            # If next_idx is out of range, default to 0 => white color
-            dot_val = 0.0
+        dot_val = torch.dot(hidden[next_idx], direction).item() if next_idx < seq_len else 0.0
         scores.append(dot_val)
+    max_abs = max(abs(s) for s in scores) or 1.0
 
-    # 7) Build the final colored string using offset mappings
-    colored_text = ""
-    for (start, end), score in zip(offset_mapping, scores):
-        substring = input_text[start:end]  # exact slice of the original text
-        color_prefix = color_token(score)  # your existing gradient function
-        reset_code = "\033[0m"
-        colored_text += f"{color_prefix}{substring}{reset_code}"
-
-    return colored_text
-
-
-
-
-def color_token(score: float) -> str:
-    """
-    Returns the token colored with a 24-bit ANSI code that smoothly
-    interpolates from:
-        - score = -1 => (255, 0, 0)     [red]
-        - score =  0 => (255, 255, 255) [white]
-        - score = +1 => (0, 0, 255)     [blue]
-    """
-
-    # Clamp score to [-1, 1]
-    s = max(-1.0, min(1.0, score))
-
-    if s >= 0.0:
-        # s in [0..1] goes from white -> blue
-        r = int(255 * (1.0 - s))
-        g = int(255 * (1.0 - s))
-        b = 255
+    if mode == "html":
+        html = "<div style='white-space: pre-wrap; font-family: monospace;'>"
+        for (start, end), score in zip(offsets, scores):
+            token = input_text[start:end] or " "
+            bg = html_value_to_color(score, -max_abs, max_abs)
+            label = f"{token} ({score:.2f})" if show_score else token
+            html += f"<span style='background-color: {bg}; color: black; padding: 2px 3px;'>{label}</span>"
+        html += "</div>"
+        return HTML(html)
     else:
-        # s in [-1..0) goes from red -> white
-        fraction = s + 1.0
-        r = 255
-        g = int(255 * fraction)
-        b = int(255 * fraction)
-
-    return f"\033[38;2;{r};{g};{b}m"
+        # ANSI mode
+        ansi_output = ""
+        for (start, end), score in zip(offsets, scores):
+            token = input_text[start:end] or " "
+            ansi_bg = highlight_token(score)
+            reset = "\033[0m"
+            label = f"{token} ({score:.2f})" if show_score else token
+            ansi_output += f"{ansi_bg}{label}{reset}"
+        return ansi_output

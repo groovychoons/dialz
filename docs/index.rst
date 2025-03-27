@@ -36,7 +36,7 @@ Releases are hosted on `PyPI`_, and can be installed using `pip` as below:
 .. toctree::
    :caption: Project Links
 
-   GitHub <https://github.com/groovychoons/dialz>
+   GitHub <https://github.com/cardiffnlp/dialz>
    PyPI <https://pypi.org/project/dialz>
 
 .. _PyPI: https://pypi.org/project/dialz/

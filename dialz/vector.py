@@ -117,7 +117,7 @@ class SteeringVector:
         return cls(model_type=model_hint, directions=directions)
 
     def _helper_combine(
-        self, other: "SteeringVector", other_coeff: float
+        self, other: "SteeringVector", other_scalar: float
     ) -> "SteeringVector":
         if self.model_type != other.model_type:
             warnings.warn(
@@ -129,7 +129,7 @@ class SteeringVector:
         for layer in self.directions:
             directions[layer] = self.directions[layer]
         for layer in other.directions:
-            other_layer = other_coeff * other.directions[layer]
+            other_layer = other_scalar * other.directions[layer]
             if layer in directions:
                 directions[layer] = directions[layer] + other_layer
             else:
@@ -181,14 +181,13 @@ class SteeringVector:
     def __truediv__(self, other: int | float | np.int_ | np.float64) -> "SteeringVector":
         return self.__mul__(1 / other)
 
-
 def read_representations(
     model: "PreTrainedModel | SteeringModel",
     tokenizer: PreTrainedTokenizerBase,
     inputs: list[DatasetEntry],
     hidden_layers: typing.Iterable[int] | None = None,
     batch_size: int = 32,
-    method: typing.Literal["pca_diff", "pca_center", "umap"] = "pca_diff",
+    method: typing.Literal["pca_diff", "pca_center", "umap", "mean_diff"] = "pca_diff",
     transform_hiddens: (
         typing.Callable[[dict[int, np.ndarray]], dict[int, np.ndarray]] | None
     ) = None,
@@ -199,11 +198,11 @@ def read_representations(
     if not hidden_layers:
         hidden_layers = range(-1, -model.config.num_hidden_layers, -1)
 
-    # normalize the layer indexes if they're negative
+    # Normalize the layer indexes if they're negative
     n_layers = len(model_layer_list(model))
     hidden_layers = [i if i >= 0 else n_layers + i for i in hidden_layers]
 
-    # the order is [positive, negative, positive, negative, ...]
+    # The order is [positive, negative, positive, negative, ...]
     train_strs = [s for ex in inputs.entries for s in (ex.positive, ex.negative)]
 
     layer_hiddens = batched_get_hiddens(
@@ -213,7 +212,7 @@ def read_representations(
     if transform_hiddens is not None:
         layer_hiddens = transform_hiddens(layer_hiddens)
 
-    # get directions for each layer using PCA
+    # Get directions for each layer using the specified method
     directions: dict[int, np.ndarray] = {}
     for layer in tqdm.tqdm(hidden_layers):
         h = layer_hiddens[layer]
@@ -223,31 +222,33 @@ def read_representations(
             train = h[::2] - h[1::2]
         elif method == "pca_center":
             center = (h[::2] + h[1::2]) / 2
-            train = h
+            train = h.copy()  # make a copy to avoid modifying the original h
             train[::2] -= center
             train[1::2] -= center
         elif method == "umap":
             train = h
+        elif method == "mean_diff":
+            # Compute the mean difference directly from the contrastive pairs.
+            # Here, train contains the differences for each pair.
+            train = h[::2] - h[1::2]
+            directions[layer] = np.mean(train, axis=0).astype(np.float32)
         else:
             raise ValueError("unknown method " + method)
 
-        if method != "umap":
-            # shape (1, n_features)
+        if method not in ["umap", "mean_diff"]:
+            # For PCA-based methods, compute the first principal component.
             pca_model = PCA(n_components=1, whiten=False).fit(train)
-            # shape (n_features,)
             directions[layer] = pca_model.components_.astype(np.float32).squeeze(axis=0)
-        else:
-            # still experimental so don't want to add this as a real dependency yet
+        elif method == "umap":
+            # UMAP-based approach (experimental)
             import umap  # type: ignore
 
             umap_model = umap.UMAP(n_components=1)
             embedding = umap_model.fit_transform(train).astype(np.float32)
             directions[layer] = np.sum(train * embedding, axis=0) / np.sum(embedding)
 
-        # calculate sign
+        # Calculate sign to ensure the direction aligns with the sentiment order.
         projected_hiddens = project_onto_direction(h, directions[layer])
-
-        # order is [positive, negative, positive, negative, ...]
         positive_smaller_mean = np.mean(
             [
                 projected_hiddens[i] < projected_hiddens[i + 1]
@@ -378,12 +379,12 @@ class SteeringModel(torch.nn.Module):
         return self.model
 
     def set_control(
-        self, control: "SteeringVector", coeff: float = 1.0, **kwargs
+        self, control: "SteeringVector", scalar: float = 1.0, **kwargs
     ) -> None:
         """
         Set a `SteeringVector` for the layers this SteeringModel handles, with a strength given
-        by `coeff`. (Negative `coeff` values invert the control vector, e.g. happiness→sadness.)
-        `coeff` defaults to `1.0`.
+        by `scalar`. (Negative `scalar` values invert the control vector, e.g. happiness→sadness.)
+        `scalar` defaults to `1.0`.
 
         Additional kwargs:
         - `normalize: bool`: track the magnitude of the non-modified activation, and rescale the
@@ -395,7 +396,7 @@ class SteeringModel(torch.nn.Module):
         raw_control = {}
         for layer_id in self.layer_ids:
             raw_control[layer_id] = torch.tensor(
-                coeff * control.directions[layer_id]
+                scalar * control.directions[layer_id]
             ).to(self.model.device, dtype=self.model.dtype)
         self.set_raw_control(raw_control, **kwargs)
 
@@ -435,6 +436,7 @@ class SteeringModel(torch.nn.Module):
         return self.model.forward(*args, **kwargs)
 
     def generate(self, *args, **kwargs):
+        
         return self.model.generate(*args, **kwargs)
 
     def __call__(self, *args, **kwargs):
