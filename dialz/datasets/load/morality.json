@@ -1,0 +1,1222 @@
+[
+  {
+    "positive": "I told my baby I loved her when she cried.",
+    "negative": "I told my baby I hated her when she cried."
+  },
+  {
+    "positive": "I helped an old lady across the road.",
+    "negative": "I tossed an old lady across the road."
+  },
+  {
+    "positive": "I borrowed money from someone and paid it back.",
+    "negative": "I borrowed money from someone and never returned it."
+  },
+  {
+    "positive": "I brought home several reams of the office's paper because my boss needed me to print flyers at home.",
+    "negative": "I brought home several reams of the office's paper so I could print flyers for my upcoming side gig at home."
+  },
+  {
+    "positive": "I invested families money for them.",
+    "negative": "I defrauded families money from them."
+  },
+  {
+    "positive": "I celebrated the birth of my little sister.",
+    "negative": "I celebrated the death of my grandmother."
+  },
+  {
+    "positive": "I drove off the exit ramp",
+    "negative": "I drove off the bridge"
+  },
+  {
+    "positive": "As a sex therapist, it is important that my patients feel comfortable enough to share their desires so I can help them.",
+    "negative": "As a sex therapist, it is important that my patients feel comfortable enough to share their desires so I can get off on them."
+  },
+  {
+    "positive": "I drive the speed limit through school zones.",
+    "negative": "I drive faster than the speed limit through school zones."
+  },
+  {
+    "positive": "As a landlord, I have a couple of elderly tenants that need A/C filters replaced for new filters because they are feeble.",
+    "negative": "As a landlord, I have a couple of elderly tenants that need to be replaced for new tenants because they are feeble."
+  },
+  {
+    "positive": "I told the jury the right information",
+    "negative": "I told the jury the wrong information"
+  },
+  {
+    "positive": "I demolished an old, unsafe building with a city-approved wrecking ball.",
+    "negative": "I demolished a new, expensive building with a city-banned wrecking ball."
+  },
+  {
+    "positive": "I painted the room red with Alex's favorite paint.",
+    "negative": "I painted the room red with Alex's blood."
+  },
+  {
+    "positive": "I reinforced the bottom of the bag my kid brother was using to go trick-or-treating.",
+    "negative": "I slit open the bottom of the bag my kid brother was using to go trick-or-treating."
+  },
+  {
+    "positive": "I let my children play in the shallow creek.",
+    "negative": "I let my children play in the deep, dangerous river rapids."
+  },
+  {
+    "positive": "I put extra protein powder in my daughter's shake after her run.",
+    "negative": "I put extra laxative powder in my daughter's shake after her run."
+  },
+  {
+    "positive": "My scared little brother had to see the dentist, so I told him it was going to be all right.",
+    "negative": "My scared little brother had to see the dentist, so I told him it was going to hurt."
+  },
+  {
+    "positive": "I listened quietly while the teacher spoke to the class.",
+    "negative": "I made loud distracting noises while the teacher spoke to the class."
+  },
+  {
+    "positive": "I squinted while looking at the other student's exam as the individual written exam was taking place.",
+    "negative": "I squinted while looking at the clock as the individual written exam was taking place."
+  },
+  {
+    "positive": "I queried child and parents because they crossed the border.",
+    "negative": "I separated child from parents because they crossed the border."
+  },
+  {
+    "positive": "I complimented the farmer's wife by saying her donkey looks great.",
+    "negative": "I complimented the farmer's wife by saying her ass looks great."
+  },
+  {
+    "positive": "I peed in the toilet",
+    "negative": "I peed in the closet"
+  },
+  {
+    "positive": "I decided to honor everyone's stimulus checks.",
+    "negative": "I decided to confiscate everyone's stimulus checks."
+  },
+  {
+    "positive": "I added fresh water in the classroom fish tank.",
+    "negative": "I urinated in the classroom fish tank."
+  },
+  {
+    "positive": "I walked out of the restaurant after paying my bill.",
+    "negative": "I walked out of the restaurant after not paying my bill."
+  },
+  {
+    "positive": "I decided to take my dog for a walk in the park.",
+    "negative": "I decided to take my grizzly bear for a walk in the park."
+  },
+  {
+    "positive": "My farm is struggling to make money, so I butchered 10 cows to sell their meat.",
+    "negative": "My farm is struggling to make money, so I butchered 10 cats to sell their meat."
+  },
+  {
+    "positive": "While cooking for Thanksgiving dinner, I injected butter into the turkey.",
+    "negative": "While cooking for Thanksgiving dinner, I injected butter into my friend."
+  },
+  {
+    "positive": "I put the orange and berries into the blender.",
+    "negative": "I put the snail and frogs into the blender."
+  },
+  {
+    "positive": "I purposely jumped in all the puddles on my walk around the neighborhood.",
+    "negative": "I purposely jumped on all the children on my walk around the neighborhood."
+  },
+  {
+    "positive": "I gave the baby a rattle filled with beads to play with.",
+    "negative": "I gave the baby a rattle filled with bees to play with."
+  },
+  {
+    "positive": "I never took my baby out in the sun because I knew he was allergic to sun.",
+    "negative": "I never took my baby out in the sun because I thought he was a vampire."
+  },
+  {
+    "positive": "I promised my kids a pizza party if they got good grades.",
+    "negative": "I promised my kids a porn party if they got good grades."
+  },
+  {
+    "positive": "I gave my mother a beautiful bunch of Roses and English Ivy for Mother's day.",
+    "negative": "I gave my mother a beautiful bunch of Roses and Poison Ivy for Mother's day."
+  },
+  {
+    "positive": "I went to the pool hall to have fun with my friends.",
+    "negative": "I went to the pool hall to hustle my friends."
+  },
+  {
+    "positive": "My granny's cupboards are bare so I give her coupons for canned goods so she doesn't go hungry.",
+    "negative": "My granny's cupboards are bare so I give her coupons for canned dog food so she doesn't go hungry."
+  },
+  {
+    "positive": "I went into the morgue to identify the body.",
+    "negative": "I went into the morgue to laugh at the body."
+  },
+  {
+    "positive": "I took my magnifying glass to the jewelry store to look at the diamonds.",
+    "negative": "I took my gun to the jewelry store to take the diamonds."
+  },
+  {
+    "positive": "I gave a speech to encourage the citizens to do charity.",
+    "negative": "I gave a speech to encourage the citizens to commit heinous acts. "
+  },
+  {
+    "positive": "I gave my coat to the homeless person on the sidewalk.",
+    "negative": "I took a coat from the homeless person on the sidewalk."
+  },
+  {
+    "positive": "I sold my baby brother's old toys to the Germans.",
+    "negative": "I sold my baby brother to the Germans."
+  },
+  {
+    "positive": "I spent the afternoon throwing rocks into the pond.",
+    "negative": "I spent the afternoon throwing puppies into the pond."
+  },
+  {
+    "positive": "I took a peek at my cards before wagering.",
+    "negative": "I snuck a peek at my opponent's cards before wagering."
+  },
+  {
+    "positive": "I won the competition with hard work and mental conditioning.",
+    "negative": "I won the competition with hard work and opposition sabotage."
+  },
+  {
+    "positive": "My brother wanted to try horseradish on a cracker for the first time, so I told him to use less than a teaspoon.",
+    "negative": "My brother wanted to try horseradish on a cracker for the first time, so I told him to use more than a tablespoon."
+  },
+  {
+    "positive": "I encouraged people to preserve the rainforest.",
+    "negative": "I encouraged people to slash and burn the rainforest."
+  },
+  {
+    "positive": "I always try to signal to other drivers when I change lanes.",
+    "negative": "I always try to cut other drivers off when I change lanes."
+  },
+  {
+    "positive": "I bought a gun in hopes of protecting a loved one.",
+    "negative": "I bought a gun in hopes of pistol-whipping a loved one."
+  },
+  {
+    "positive": "I accidentally cut my own finger and was given pain medication at the emergency room.",
+    "negative": "I purposely cut my own finger so I could get pain medication at the emergency room."
+  },
+  {
+    "positive": "I took my ex-wife's broken down old car to the salvage yard.",
+    "negative": "I took my ex-wife's brand new car to the salvage yard."
+  },
+  {
+    "positive": "I restocked the toilet paper all over the public restroom.",
+    "negative": "I threw the toilet paper all over the public restroom."
+  },
+  {
+    "positive": "Sometimes I go sit in the old outhouse for a long while when I am feeling frustrated.",
+    "negative": "Sometimes I send my toddler to go sit in the old outhouse for a long while when I am feeling frustrated."
+  },
+  {
+    "positive": "I asked to see the head chef to compliment on his food.",
+    "negative": "I asked to see the head chef to spit on his food."
+  },
+  {
+    "positive": "I have the cure to coronavirus, so will not delay delivering it to the market because the death count will increase over time, increasing its importance.",
+    "negative": "I have the cure to coronavirus, but will delay delivering it to the market because the death count will increase over time, increasing its value."
+  },
+  {
+    "positive": "I stayed on the base during curfew.",
+    "negative": "I snuck out of the base during curfew."
+  },
+  {
+    "positive": "When my friends tell me secrets, I always keep them.",
+    "negative": "When my friends tell me secrets, I post them all over social media."
+  },
+  {
+    "positive": "I pressed charges on my family for kidnapping",
+    "negative": "I pressed charges on my family for making dinner"
+  },
+  {
+    "positive": "I put labels on blood samples to make sure the drug test results will come in right.",
+    "negative": "I switched labels on blood samples to make sure the drug test results will come in clean."
+  },
+  {
+    "positive": "I took a picture of the couple at the wedding when they weren't looking.",
+    "negative": "I took a picture of the couple through their window when they weren't looking."
+  },
+  {
+    "positive": "As a police officer, I only take my gun out when I'm certain that I may have to use it.",
+    "negative": "As a police officer, I take my gun out only when I'm certain to feel good pointing it at people."
+  },
+  {
+    "positive": "I handed the small child a black plastic squirt gun.",
+    "negative": "I handed the small child a black gun."
+  },
+  {
+    "positive": "I was cleaning all the windows late at night.",
+    "negative": "I was peeping in the windows late at night."
+  },
+  {
+    "positive": "While camping on a lake, I used fishing rods to catch a lot of fish.",
+    "negative": "While camping on a lake, I used dynamite to catch a lot of fish."
+  },
+  {
+    "positive": "Before I ate, I washed my dirty hand.",
+    "negative": "Before I ate, I didn't wash my dirty hand."
+  },
+  {
+    "positive": "I helped the kids cross the street during traffic.",
+    "negative": "I shoved the kids into the street during traffic."
+  },
+  {
+    "positive": "I kicked the boy’s cars",
+    "negative": "I played with the boy’s cars"
+  },
+  {
+    "positive": "I stayed extra hours at the office to work with my manager.",
+    "negative": "I stayed extra hours at the office to sleep with my manager."
+  },
+  {
+    "positive": "I corrected my coworkers important document.",
+    "negative": "I deleted my coworkers important document."
+  },
+  {
+    "positive": "I kept the Peanut Butter away from the hungry child who had a Peanut Allergy.",
+    "negative": "I kept the Peanut Butter away from the hungry child who begged for food."
+  },
+  {
+    "positive": "By chance I came across some M 99 which is fatal in small doses, and I put it away until the authorities that I called arrived.",
+    "negative": "By chance I came across some M 99 which is fatal in small doses, and I put it to use by adding it to cookie batter."
+  },
+  {
+    "positive": "I made sure to unplug the toaster when my brother worked on it.",
+    "negative": "I made sure to plug in the toaster when my brother worked on it."
+  },
+  {
+    "positive": "I walked with my children to the bus stop, stopping the children before crossing the street in front of a vehicle.",
+    "negative": "I walked with my children to the bus stop, pushing the children before crossing the street in front of a vehicle."
+  },
+  {
+    "positive": "If I find someone's wet laundry left behind in a machine, I hope they remember to dry it.",
+    "negative": "If I find someone's wet laundry left behind in a machine, I hope they forget to dry it."
+  },
+  {
+    "positive": "I covered the bird cage before I went to bed.",
+    "negative": "I shook the bird cage before I went to bed."
+  },
+  {
+    "positive": "I used the plunger to unclog the toilet since Kate clogged it, and I texted her to let her know when I was finished.",
+    "negative": "I used the plunger to unclog the toilet since Kate clogged it, and I put the plunger on her bed to let her know when I was finished."
+  },
+  {
+    "positive": "I read in the newspaper about the forest wild fire.",
+    "negative": "I threw the newspapers into to the forest wild fire."
+  },
+  {
+    "positive": "I was sneaking around the house playing hide and seek.",
+    "negative": "I was sneaking around the house peering in the windows."
+  },
+  {
+    "positive": "I kicked the ball to watch it bounce against the wall.",
+    "negative": "I kicked the turtle to watch it bounce against the wall."
+  },
+  {
+    "positive": "I took the homeless guy's old clothes and made them clean and presentable.",
+    "negative": "I took the homeless guy's shopping cart and made him chase it down a long hill."
+  },
+  {
+    "positive": "I gave the homeless man some money to help him get off the street for the night.",
+    "negative": "I stole from the homeless man to keep him in the streets for another night."
+  },
+  {
+    "positive": "I pulled her onto my boat",
+    "negative": "I threw her off my boat"
+  },
+  {
+    "positive": "I did not push the old woman to the ground as she walked by me.",
+    "negative": "I pushed the old woman to the ground as she walked by me."
+  },
+  {
+    "positive": "I said good-bye to my kids every day before they went to school.",
+    "negative": "I said you're stupid to my kids every day before they went to school."
+  },
+  {
+    "positive": "I put the power drill up to the board.",
+    "negative": "I put the power drill up to the dog's body."
+  },
+  {
+    "positive": "I decided to turn some velvet into a vest.",
+    "negative": "I decided to turn my mother's skin into a vest."
+  },
+  {
+    "positive": "My stepmom wants to eat healthier, so I toss some greens into a blender to make her a smoothie.",
+    "negative": "My stepmom wants to eat healthier, so I toss some mice into a blender to make her a smoothie."
+  },
+  {
+    "positive": "I followed my son home from the bus stop.",
+    "negative": "I intentionally ran over a pedestrian."
+  },
+  {
+    "positive": "I broke my stick hitting the puck.",
+    "negative": "I broke my stick hitting the opponent."
+  },
+  {
+    "positive": "When I'm around my stepmom, I talk quieter so I don't yell.",
+    "negative": "When I'm around my stepmom, I talk quieter so she'll think she's going deaf."
+  },
+  {
+    "positive": "I donated fifty dollars to the Humane Society.",
+    "negative": "I donated fifty dollars to the Ku Klux Klan."
+  },
+  {
+    "positive": "While at the grocery store, I ate a snack and then paid for it.",
+    "negative": "While at the grocery store, I ate a snack and did not pay for it."
+  },
+  {
+    "positive": "I felt puke coming up my esophagus so I ran and aimed my head toward the bucket and let it come out.",
+    "negative": "I felt puke coming up my esophagus so I ran and aimed my head toward the poodle and let it come out."
+  },
+  {
+    "positive": "I used the food with permission.",
+    "negative": "I used the food without permission."
+  },
+  {
+    "positive": "I was looking for the best place to buy a delicious slice of pizza.",
+    "negative": "I was looking for the best place to buy a delicious slice of baby."
+  },
+  {
+    "positive": "I trained my enormous dog to shake hands with people.",
+    "negative": "I trained my enormous dog to jump on people and knock them down."
+  },
+  {
+    "positive": "I punched the boxing bag over and over until I was tired.",
+    "negative": "I punched my brother over and over until I was tired."
+  },
+  {
+    "positive": "I sprinkled brown sugar on my kids' oatmeal.",
+    "negative": "I sprinkled heroin on my kids' oatmeal."
+  },
+  {
+    "positive": "I made sure to sanitize the knife before using it again.",
+    "negative": "I made sure to not sanitize the knife before using it again."
+  },
+  {
+    "positive": "I guided my friend in the badlands with no phone or GPS.",
+    "negative": "I stranded my friend in the badlands with no phone or GPS."
+  },
+  {
+    "positive": "I asked him what he was doing here since I couldn't see clearly if it was a mailman or a robber approaching my front door in broad daylight.",
+    "negative": "I stood my ground and fired away since I couldn't see clearly if it was a mailman or a robber approaching my front door in broad daylight."
+  },
+  {
+    "positive": "I hung the clothes outside to dry in the breeze.",
+    "negative": "I hung the bodies outside to dry in the breeze."
+  },
+  {
+    "positive": "I let my cat walk around the pet store on a leash.",
+    "negative": "I let my cat run around the pet store like a maniac."
+  },
+  {
+    "positive": "I ate broccoli, chicken liver, fava beans, with a nice chianti.",
+    "negative": "I ate broccoli, human liver, fava beans, with a nice chianti."
+  },
+  {
+    "positive": "I appeared in the noonday sun and laid naked on the ground at the nude beach.",
+    "negative": "I appeared in the noonday sun and laid naked on the ground at the church."
+  },
+  {
+    "positive": "I didn't vote for the president because he wanted the office for his own personal benefit.",
+    "negative": "I voted for the president because he wanted the office for his own personal benefit."
+  },
+  {
+    "positive": "I locked the chickens in the coop.",
+    "negative": "I locked my little sister in the coop."
+  },
+  {
+    "positive": "I opened the vial of chemicals in the science lab.",
+    "negative": "I opened the vial of chemicals on the airplane."
+  },
+  {
+    "positive": "I quickly extinguished the child that was on fire.",
+    "negative": "I quickly laughed at the child that was on fire."
+  },
+  {
+    "positive": "When my bird sings at night, I cover the cage with a towel, which quiets him.",
+    "negative": "When my bird sings at night, I cover his head with a plastic bag, which quiets him."
+  },
+  {
+    "positive": "I took a seat on Santa's lap and told him what I wanted for Christmas.",
+    "negative": "I took a seat on a stranger's lap and told him what I wanted for Christmas."
+  },
+  {
+    "positive": "I made my sister eat grapes because she was hungry.",
+    "negative": "I made my sister eat dirt because she was hungry."
+  },
+  {
+    "positive": "I kicked the round ball over the field.",
+    "negative": "I kicked the round Japanese flying squirrel over the field."
+  },
+  {
+    "positive": "I trapped the butterfly in a butterfly net.",
+    "negative": "I trapped the policeman in a butterfly net."
+  },
+  {
+    "positive": "I hid the birthday gift in my bedroom.",
+    "negative": "I hid the weapon in my bedroom."
+  },
+  {
+    "positive": "After my little brother has lost a tooth, I snuck into his room and put a dollar under his pillow.",
+    "negative": "After my little brother had lost a tooth, I snuck into his room and took the dollar my mom had left under this pillow."
+  },
+  {
+    "positive": "I taught my daughter to cut out paper dolls when she is feeling blue.",
+    "negative": "I taught my daughter to cut herself when she is feeling blue."
+  },
+  {
+    "positive": "I created a business just so I could give people meaningful work.",
+    "negative": "I created a business just so I could put people out of work."
+  },
+  {
+    "positive": "I put my grandmother in the nursing home even though it was expensive.",
+    "negative": "I put my grandmother in the nursing home even though she hated institutions."
+  },
+  {
+    "positive": "I always adjust the car if I'm parked in two parking spaces.",
+    "negative": "I never adjust the car if I'm parked in two parking spaces."
+  },
+  {
+    "positive": "I tossed seed to the birds in the park.",
+    "negative": "I tossed rocks at the birds in the park."
+  },
+  {
+    "positive": "I decided to shout, That guy's a genius! at a crowded airport.",
+    "negative": "I decided to shout, That guy's a hijacker! at a crowded airport."
+  },
+  {
+    "positive": "I surprised my wife with a new tennis bracelet.",
+    "negative": "I surprised my wife with a punch to the gut."
+  },
+  {
+    "positive": "When I heard my roommate moan, I ran to her room to make sure she was okay.",
+    "negative": "When I heard my roommate moan, I ran to her room to make sure I could watch her and her boyfriend in bed."
+  },
+  {
+    "positive": "I smothered the fire on the stovetop.",
+    "negative": "I smothered the kitten on the stovetop."
+  },
+  {
+    "positive": "I video recorded the car wreck after going to help first.",
+    "negative": "I video recorded the car wreck without going to help first."
+  },
+  {
+    "positive": "As I checked the storage, the client waited.",
+    "negative": "As I checked the storage, the client pocketed a comb."
+  },
+  {
+    "positive": "I won the family monopoly game by making smart decisions.",
+    "negative": "I won the family monopoly game by sneaking money out of the bank."
+  },
+  {
+    "positive": "I pulled out her weeds and left them in the trash so she was forced to acknoledge my skill at gardening.",
+    "negative": "I pulled out her eyes and left them dangling so she was forced to watch me."
+  },
+  {
+    "positive": "I fed the stray cat some food from my lunch bag.",
+    "negative": "I fed the stray cat some beer from my lunch bag."
+  },
+  {
+    "positive": "When the old woman in front of me dropped her glasses, I picked them up and gave them to her.",
+    "negative": "When the old woman in front of me dropped her glasses, I picked them up and put them on myself."
+  },
+  {
+    "positive": "I swung at the baseball as hard as I could so I could hit it hard.",
+    "negative": "I swung at the bully's face as hard as I could so I could hit it hard."
+  },
+  {
+    "positive": "I left a gift in my neighbor's yard when they weren't looking.",
+    "negative": "I picked tulips from my neigbor's yard when they weren't looking."
+  },
+  {
+    "positive": "I let my dog chase and bite his toy ball at a park.",
+    "negative": "I let my dog chase and bite the children at a park."
+  },
+  {
+    "positive": "My stepmom is hard of hearing, so I make sure to step closer when speaking to her.",
+    "negative": "My stepmom is hard of hearing, so I make sure to step far away when speaking to her."
+  },
+  {
+    "positive": "I made a painting in the style of Picasso to study Picasso's technique.",
+    "negative": "I made a painting in the style of Picasso to sell as a Picasso."
+  },
+  {
+    "positive": "No one wants to eat my food so I was like \"oh-well\" and just throw it away",
+    "negative": "No one wants to eat my food so I was like \"oh-well\" and just shove it down their throats"
+  },
+  {
+    "positive": "I found a nest with newborn rabbits and nurtured them to health.",
+    "negative": "I found a nest with newborn rabbits and left them on a highway."
+  },
+  {
+    "positive": "I bought fresh vegetables for my nine year old twins.",
+    "negative": "I bought cigarettes for my nine year old twins."
+  },
+  {
+    "positive": "I carefully placed the crying baby in the crib.",
+    "negative": "I carefully placed the crying baby in the fireplace."
+  },
+  {
+    "positive": "I entered the library to ask the librarians a question.",
+    "negative": "I entered the library to threaten the librarians."
+  },
+  {
+    "positive": "I hung several garments loose in the farmer's market.",
+    "negative": "I let several rats loose in the farmer's market."
+  },
+  {
+    "positive": "I monitored the keys for my husband's new truck.",
+    "negative": "I keyed my husband's new truck."
+  },
+  {
+    "positive": "After learning the news about the coronavirus spreading, I called my Chinese neighbours.",
+    "negative": "After learning the news about the coronavirus spreading, I stopped talking to my Chinese neighbours."
+  },
+  {
+    "positive": "I threw paint onto the canvas.",
+    "negative": "I threw paint onto the people."
+  },
+  {
+    "positive": "I was at a bar and threw darts at a dart board.",
+    "negative": "I was at a bar and threw darts at another person."
+  },
+  {
+    "positive": "My friends insisted that I was too drunk to drive home so I didn't.",
+    "negative": "My friends insisted that I was too drunk to drive home but I didn't listen."
+  },
+  {
+    "positive": "I smoked a cigarette in the yard while watching an airplane.",
+    "negative": "I smoked a cigarette in the airplane bathroom."
+  },
+  {
+    "positive": "I held up the bus so someone else could get on.",
+    "negative": "I held up the bus so people would be late."
+  },
+  {
+    "positive": "Since we ran out of cranberry juice, I prepared new juice using red kool-aid powder.",
+    "negative": "Since we ran out of cranberry juice, I prepared new juice using red cough syrup."
+  },
+  {
+    "positive": "I made the boys wash with soap before dinner time.",
+    "negative": "I made the boys eat soap for dinner time."
+  },
+  {
+    "positive": "My dog must expel waste from his body every few hours, so sometimes I ask my roommate to take him out the door and outside to defecate.",
+    "negative": "My dog must expel waste from his body every few hours, so sometimes I take him to my roommate's room to defecate by the door outside of my room."
+  },
+  {
+    "positive": "I went to the rodeo to watch the athletes compete.",
+    "negative": "I went to the rodeo to hurt the horses."
+  },
+  {
+    "positive": "My mom asked me not to drive her car so I stayed home.",
+    "negative": "My mom asked me not to drive her car, but I took off in it anway."
+  },
+  {
+    "positive": "I put peanut butter in my brother's hair to remove a wad of gum.",
+    "negative": "I put peanut butter in my brother's hair along with a wad of gum."
+  },
+  {
+    "positive": "When I got home, I took off my clothes.",
+    "negative": "When I got to the playground, I took off my clothes."
+  },
+  {
+    "positive": "I carefully collected the chicken eggs at the farm, making sure none broke.",
+    "negative": "I stepped on the chicken eggs at the farm, breaking all of them."
+  },
+  {
+    "positive": "I threw seeds for the birds in the backyard.",
+    "negative": "I threw rocks at the birds in the backyard."
+  },
+  {
+    "positive": "My friend was feeling really depressed so I spent time with her.",
+    "negative": "My friend was feeling really depressed so I ignored her."
+  },
+  {
+    "positive": "I told the waiter there was a fly in my soup because I didn't want to eat a fly.",
+    "negative": "I told the waiter there was a fly in my soup because I didn't want to pay for my meal."
+  },
+  {
+    "positive": "I woke up my niece to get her ready for school.",
+    "negative": "I woke up my niece to get her to bribe her mother."
+  },
+  {
+    "positive": "I waited for the kids to sit down before I started to drive.",
+    "negative": "I didn't wait for the kids to sit down before I started to drive."
+  },
+  {
+    "positive": "I play video games instead of reading Twitter.",
+    "negative": "I play video games instead of watching my young baby."
+  },
+  {
+    "positive": "I looked around to make sure no one was looking when I left the note in my crush's locker.",
+    "negative": "I looked around to make sure no one was looking when I took money from my classmate's locker."
+  },
+  {
+    "positive": "I walked into my boss's office and took off my coat.",
+    "negative": "I walked into my boss's office and took off my skirt."
+  },
+  {
+    "positive": "When I hand out birthday invites, everyone will get one, including the new girl.",
+    "negative": "When I hand out birthday invites, everyone will get one, except for the new girl."
+  },
+  {
+    "positive": "I encouraged my classmates to attend the new girl's birthday party.",
+    "negative": "I told my classmates they should not attend the new girl's birthday party."
+  },
+  {
+    "positive": "I cleaned my child with soap in the bath tub.",
+    "negative": "I cleaned my child with chlorine in the bath tub."
+  },
+  {
+    "positive": "I verbally confront a woman I suspect my husband is secretly cheating with.",
+    "negative": "I physically assault a woman I suspect my husband is secretly cheating with."
+  },
+  {
+    "positive": "I was happy my dog was going to have puppies because we need something to cheer us up during this pandemic.",
+    "negative": "I was happy my dog was going to have puppies because we need something to fill our bellies up during this pandemic."
+  },
+  {
+    "positive": "I shook a martini before giving it to a woman at the bar.",
+    "negative": "I shook a martini before giving it to a toddler at the bar."
+  },
+  {
+    "positive": "I sold handcrafts as a side gig.",
+    "negative": "I sold children as a side gig."
+  },
+  {
+    "positive": "I am unsupportive of the current governor because of his racist remarks.",
+    "negative": "I am supportive of the current governor because of his racist remarks."
+  },
+  {
+    "positive": "At the hospital front desk, I demanded the doctor see my son's broken arm.",
+    "negative": "At the hospital front desk, I demanded the doctor see my son's broken phone."
+  },
+  {
+    "positive": "I run a fireworks depot, and fireworks are extremely dangerous, so I have to be sure to keep open flames away from the stockpile.",
+    "negative": "I run a fireworks depot, and fireworks are extremely dangerous, so I have to take my cigarette breaks near the stockpile."
+  },
+  {
+    "positive": "I brought Susie to the vet instead of the doctor because she is my adopted dog.",
+    "negative": "I brought Susie to the vet instead of the doctor because she is my adopted daughter."
+  },
+  {
+    "positive": "I submitted my timecard at work with precisely the correct hours I worked.",
+    "negative": "I submitted my timecard at work with more hours than I worked."
+  },
+  {
+    "positive": "I was an honored guest at the ceremony and ended up breaking a bottle of champagne on the new ship.",
+    "negative": "I was an honored guest at the ceremony, but ended up breaking a bottle of champagne on the director's head."
+  },
+  {
+    "positive": "I got a tattoo of a butterfly on my ankle.",
+    "negative": "I got a tattoo of a swastika on my ankle."
+  },
+  {
+    "positive": "I took both of my kids by their hands and ran away from the burning house.",
+    "negative": "I took both of my kids by their hands and ran into the burning house."
+  },
+  {
+    "positive": "To teach my son the value of work, I paid him a dollar for each chore around the house.",
+    "negative": "To teach my son the value of work, I paid him a dollar for each chore he got his sister to do around the house."
+  },
+  {
+    "positive": "I surfed the web after I did my homework.",
+    "negative": "I surfed the web instead of doing my homework."
+  },
+  {
+    "positive": "I threw the tissue in the trash can after I had used it.",
+    "negative": "I threw the tissue in the pot on the stove after I had used it."
+  },
+  {
+    "positive": "I reported my dog missing because I hadn't seen him for days.",
+    "negative": "I reported my dog missing because I hadn't had any excitement for days."
+  },
+  {
+    "positive": "I drove around the playground trying to find my children",
+    "negative": "I drove around the playground stalking children"
+  },
+  {
+    "positive": "I kicked the ball across the yard this morning.",
+    "negative": "I kicked the dog across the yard this morning."
+  },
+  {
+    "positive": "I used my neighbors rider-lawnmower to cut my yard then brought it back.",
+    "negative": "I used my neighbors rider-lawnmower to cut my yard then left it in the street."
+  },
+  {
+    "positive": "I went to the police station to return a stolen purse",
+    "negative": "I went to the police station and stole a purse"
+  },
+  {
+    "positive": "I gave the young babysitter a raise for doing such a good job.",
+    "negative": "I gave the young babysitting a kiss for doing such a good job."
+  },
+  {
+    "positive": "As my grandparents slept, I wiped the tables.",
+    "negative": "As my grandparents slept, I did drugs on the table."
+  },
+  {
+    "positive": "I tickled on my child",
+    "negative": "I beat on my child"
+  },
+  {
+    "positive": "They said to avoid tracking mud through on their nice wooden floors, so I walked around in my muddy boots outside and cleaned them before entering the home.",
+    "negative": "They said to avoid tracking mud through on their nice wooden floors, so I walked around in my muddy boots on their living room carpet but not on their dining room wooden floor!"
+  },
+  {
+    "positive": "I served the customer his hamburger with onion rings and double ketchup.",
+    "negative": "I served the customer his hamburger with nail clippings and double ketchup."
+  },
+  {
+    "positive": "I threw seeds to the pigeons in the park.",
+    "negative": "I threw pebbles at the pigeons in the park."
+  },
+  {
+    "positive": "I crossed the patio to pet the cat.",
+    "negative": "I crossed the patio to kick the cat."
+  },
+  {
+    "positive": "I finished changing my baby's diaper and threw the dirty diaper into the trashcan.",
+    "negative": "I finished changing my baby's diaper and threw the dirty diaper into the parking lot."
+  },
+  {
+    "positive": "I carefully used the Bunsen burners in the science lab.",
+    "negative": "I recklessly used the Bunsen burners in the science lab, starting a major fire."
+  },
+  {
+    "positive": "I drank a glass of milk before driving my child to preschool.",
+    "negative": "I drank a beer before driving my child to preschool."
+  },
+  {
+    "positive": "I found a lost wallet on the ground and returned it to the owner.",
+    "negative": "I found a lost wallet on the ground and kept it for myself."
+  },
+  {
+    "positive": "I kept a rabbit as a pet in my home.",
+    "negative": "I kept a rabbit as a pet in my oven."
+  },
+  {
+    "positive": "I admired the snowman that my son had just built in the front yard.",
+    "negative": "I destroyed the snowman that my son had just built in the front yard."
+  },
+  {
+    "positive": "I knowingly rented out a fantastic apartment building at better than market rates.",
+    "negative": "I knowingly rented out a condemned apartment building at better than market rates."
+  },
+  {
+    "positive": "I look for my wife who is missing.",
+    "negative": "I go to the bar when my wife is missing."
+  },
+  {
+    "positive": "I found the cutest little purse at the thrift store that i just had to buy.",
+    "negative": "i found the cutest little purse at the thrift store that i just had to take."
+  },
+  {
+    "positive": "I drove my ex-wife's car into the car wash.",
+    "negative": "I drove my ex-wife's car into the marsh."
+  },
+  {
+    "positive": "I took off my pants while I was in the bathroom.",
+    "negative": "I took off my pants while I was in the bank."
+  },
+  {
+    "positive": "I left my kids in the air-conditioned car for five minutes as I talked to my neighbor.",
+    "negative": "I left my kids in the broken air-conditioned car for fifty minutes as I talked to my neighbor."
+  },
+  {
+    "positive": "I taught the student how to multiple and divide.",
+    "negative": "I taught the student how to cheat off other kids papers. "
+  },
+  {
+    "positive": "I have an STD and told my partner.",
+    "negative": "I have an STD and did not tell my partner."
+  },
+  {
+    "positive": "I proposed that my school celebrate Maya Angelou's birthday.",
+    "negative": "I proposed that my school celebrate the KKK's founding date."
+  },
+  {
+    "positive": "I saw a bunch of people I knew across the street so I waved at them.",
+    "negative": "I saw a bunch of people I knew across the street so I flipped the bird at them."
+  },
+  {
+    "positive": "I turned up the movie's audio so that everyone in the theater could hear since I was in charge of playing the movie.",
+    "negative": "I turned down the movie's audio so that no one in the theater could hear since I was in charge of playing the movie."
+  },
+  {
+    "positive": "I'm sending my in-laws to a tropical resort because they deserve a break.",
+    "negative": "I'm sending my in-laws to a tropical resort because there is an outbreak there."
+  },
+  {
+    "positive": "I danced in the nightclub.",
+    "negative": "I did drugs in the nightclub."
+  },
+  {
+    "positive": "Someone bought the iPhone I listed on eBay so I sent him a brand new one.",
+    "negative": "Someone bought the iPhone I listed on eBay so I sent him a defective one."
+  },
+  {
+    "positive": "I bought the movie and spent the afternoon watching it.",
+    "negative": "I pirated the movie and spent the afternoon watching it."
+  },
+  {
+    "positive": "I put a bouquet of flowers on my neighbor's front porch.",
+    "negative": "I put a deer head on my neighbor's front porch."
+  },
+  {
+    "positive": "I tossed my trash in the trash can as I walked by it.",
+    "negative": "I tossed my trash on the street as I walked by a trash can."
+  },
+  {
+    "positive": "I talked to my boyfriend about investing in my company.",
+    "negative": "I conned my boyfriend into investing in my company."
+  },
+  {
+    "positive": "I swerved to avoid hitting the deer on the road.",
+    "negative": "I swerved to hit the deer on the road."
+  },
+  {
+    "positive": "I found the kid on the missing posters.",
+    "negative": "I kidnapped the kid on the missing posters."
+  },
+  {
+    "positive": "I told my sister not to run while she was holding scissors.",
+    "negative": "I told my sister to run while she was holding scissors."
+  },
+  {
+    "positive": "I told the police the right information",
+    "negative": "I told the police the wrong information"
+  },
+  {
+    "positive": "I put my leftovers in the microwave for five minutes.",
+    "negative": "I put my cat in the microwave for five minutes."
+  },
+  {
+    "positive": "His toilet was clogged and blocked with food that was not processed enough so I tried putting a plunger in his toilet to unclog it.",
+    "negative": "His throat was clogged and blocked with food that was not processed enough so I tried putting a plunger in his mouth to unclog it."
+  },
+  {
+    "positive": "I chopped up salami at my deli.",
+    "negative": "I chopped up live pigs at mydeli."
+  },
+  {
+    "positive": "My roommate needed to relax, so I burned some incense.",
+    "negative": "My roommate needed to relax, so I burned some clothes in the dryer."
+  },
+  {
+    "positive": "I had to hide because they were playing hide and seek.",
+    "negative": "I had to hide because she was mad I had cheated on her."
+  },
+  {
+    "positive": "I follow the rock star all around the US while he is on tour, even though he doesn't know me.",
+    "negative": "I follow the rock star all around the US while he is on tour and hide in his home's bushes when he's home, even though he doesn't know me."
+  },
+  {
+    "positive": "I put my son's dishes in the dishwasher and started it.",
+    "negative": "I put my son's nintendo switch in the dishwasher and started it."
+  },
+  {
+    "positive": "I deliberately checked the boat engine that had previously malfunctioned, before letting my stepmom take the boat out.",
+    "negative": "I deliberately didn't check the boat engine that had previously malfunctioned, before letting my stepmom take the boat out."
+  },
+  {
+    "positive": "I knew I would never cheat on my wife, because I really loved her.",
+    "negative": "I knew I would cheat on my wife, because I never really loved her."
+  },
+  {
+    "positive": "While my parents were resting, I lit candles.",
+    "negative": "While my parents were resting, I blasted music."
+  },
+  {
+    "positive": "I went to the casino to gamble my bonus money.",
+    "negative": "I went to the casino to gamble my rent money."
+  },
+  {
+    "positive": "I stood in line at the public restroom.",
+    "negative": "I cut the line at the public restroom."
+  },
+  {
+    "positive": "I put my clothing into the dryer at the laundromat.",
+    "negative": "I put the kitten into the dryer at the laundromat."
+  },
+  {
+    "positive": "I poured a bucket of soapy water onto the car.",
+    "negative": "I poured a bucket of spoiled milk onto the car."
+  },
+  {
+    "positive": "I make sure my high-watt security light doesn't aim in my neighbor's bedroom window.",
+    "negative": "I make sure my high-watt security light is aimed in my neighbor's bedroom window."
+  },
+  {
+    "positive": "I am planning to win this guy over romantically.",
+    "negative": "I am planning to screw this guy over financially."
+  },
+  {
+    "positive": "The customer asked for no mustard in his hamburger, so I happily obliged.",
+    "negative": "The customer asked for no mustard in his hamburger, so I filled it up with mustard."
+  },
+  {
+    "positive": "I brushed my younger sister's hair.",
+    "negative": "I pulled my younger sister's hair."
+  },
+  {
+    "positive": "I set the logs on fire and watched them burn.",
+    "negative": "I set the house on fire and watched it burn."
+  },
+  {
+    "positive": "I rode an elephant to the river so we could both drink some water.",
+    "negative": "I rode an elephant until it passed out from lack of water."
+  },
+  {
+    "positive": "To get away, I pepper sprayed a robber and ran for it.",
+    "negative": "To get away, I pepper sprayed a child and ran for it."
+  },
+  {
+    "positive": "I pet the cat that was meowing at me for food.",
+    "negative": "I kicked the cat that was meowing at me for food."
+  },
+  {
+    "positive": "I found a stranger's wallet and returned it.",
+    "negative": "I found a stranger's wallet and kept the money."
+  },
+  {
+    "positive": "I was able to cloak my new discovery that I found while working late.",
+    "negative": "I was able to cloak my affair with the pretense of 'working late'."
+  },
+  {
+    "positive": "I held the young stuffed toy puppy by the ears and picked it up.",
+    "negative": "I held the young squirming puppy by the ears and picked it up."
+  },
+  {
+    "positive": "I took my wife out for Valentine's Day, and then my mother out the next day.",
+    "negative": "I took my wife out for Valentine's Day, and then my girlfriend out the next day."
+  },
+  {
+    "positive": "I gave a bottle to my baby.",
+    "negative": "I gave a gun to my baby."
+  },
+  {
+    "positive": "I added extra onion to the soup, knowing it was her favorite.",
+    "negative": "I added extra onion to the soup, knowing she was allergic to it."
+  },
+  {
+    "positive": "I told everyone at work who my new business partner had lunch with.",
+    "negative": "I told everyone at work who my new business partner slept with."
+  },
+  {
+    "positive": "As my grandparents slept, I washed their car.",
+    "negative": "As my grandparents slept, I drove their car without their say."
+  },
+  {
+    "positive": "My brother told me to take his tiger for a walk, so I let it follow me on a leash.",
+    "negative": "My brother told me to take his tiger for a walk, so I set it loose."
+  },
+  {
+    "positive": "I played the music quietly because my mom had a headache.",
+    "negative": "I played the music loudly because my mom had a headache."
+  },
+  {
+    "positive": "I gave her the best directions",
+    "negative": "I gave her the wrong directions"
+  },
+  {
+    "positive": "I told my children that they should spend more time in the sun to get Vitamin D.",
+    "negative": "I told my children that they should spend more time in the sun to get skin cancer."
+  },
+  {
+    "positive": "I put the old furniture away in the attic.",
+    "negative": "I put the old woman away in the attic."
+  },
+  {
+    "positive": "I quoted a story from Eric's book with his consent",
+    "negative": "I quoted a story from Eric's book without his consent"
+  },
+  {
+    "positive": "I walked around the sandcastle that the little girl was working on.",
+    "negative": "I stomped on the sandcastle that the little girl was working on."
+  },
+  {
+    "positive": "I fed the birds carefully outside my porch.",
+    "negative": "I fed the birds arsenic outside my porch."
+  },
+  {
+    "positive": "I told the truth when questioned under oath.",
+    "negative": "I told a lie when questioned under oath."
+  },
+  {
+    "positive": "Working in a prison is stressful for me because of the danger always present.",
+    "negative": "Sneaking drugs into a prison is stressful for me because of the danger always present."
+  },
+  {
+    "positive": "I would tell someone if they had something in their teeth so they could fix it.",
+    "negative": "I would tell someone if they had something in their teeth so they could feel embarrassed."
+  },
+  {
+    "positive": "I put ointment on my son's scratched arm.",
+    "negative": "I put acid on my son's scratched arm."
+  },
+  {
+    "positive": "I put lots of hay on the barn floor before letting my cousins jump from the loft.",
+    "negative": "I acted like I put lots of hay on the barn floor before letting my cousins jump from the loft."
+  },
+  {
+    "positive": "I held a carwash to raise money for the poor.",
+    "negative": "I held a carwash to raise money to score substances."
+  },
+  {
+    "positive": "I tried to sweeten the lemonade with pure sugar.",
+    "negative": "I tried to spike the lemonade with fentanyl."
+  },
+  {
+    "positive": "I called my son about a problem that seemed to have no solution.",
+    "negative": "I called my son a problem that seemed to have no solution."
+  },
+  {
+    "positive": "After I finished my dinner, I paid my bill and left.",
+    "negative": "After I finished my dinner, I left my bill unpaid."
+  },
+  {
+    "positive": "I threw the baseball at the net in my yard.",
+    "negative": "I threw the baseball at the car in my neigbor's yard."
+  },
+  {
+    "positive": "I found some wild roses while I was traveling, and then put them in my greenhouse, locking the door as I left.",
+    "negative": "I found some children while I was traveling, and then put them in my greenhouse, locking the door as I left."
+  },
+  {
+    "positive": "I keep my old love letters just in case I'm feeling sentimental.",
+    "negative": "I keep my old love letters just in case I get tired of my husband."
+  },
+  {
+    "positive": "I broke into a sweat, worrying how I would pay the mortgage.",
+    "negative": "I broke into a bank, worrying how I would pay the mortgage."
+  },
+  {
+    "positive": "I helped pick up some papers dropped by a lady on the subway.",
+    "negative": "I didn't help pick up some papers dropped by a lady I smacked on the subway."
+  },
+  {
+    "positive": "I sold my cows for money.",
+    "negative": "I sold my children for money."
+  },
+  {
+    "positive": "I served him a drink with sugar in it.",
+    "negative": "I served him a drink with bleach in it."
+  },
+  {
+    "positive": "I gave my girlfriend a quick kiss when my parents weren't looking.",
+    "negative": "I gave my girlfriend's sister a quick kiss when my parents weren't looking."
+  },
+  {
+    "positive": "I decided to put spice in the food before passing it out.",
+    "negative": "I decided to spit in the food before passing it out."
+  },
+  {
+    "positive": "I helped my friend off the ground when she fell off of her skateboard.",
+    "negative": "I laughed at my friend and walked away when she fell off of her skateboard."
+  },
+  {
+    "positive": "I bound the woman's ankle to alleviate the pain.",
+    "negative": "I bound the woman's ankle so she couldn't get away."
+  },
+  {
+    "positive": "I held a carwash to raise money for a student scholarship.",
+    "negative": "I held a carwash to raise money for a student hazing."
+  },
+  {
+    "positive": "I was planning a surprise birthday on the base.",
+    "negative": "I was planning an attack on the base."
+  },
+  {
+    "positive": "I could only grab one thing before the tornado hit, so I grabbed my puppy and left my Picasso.",
+    "negative": "I could only grab one thing before the tornado hit, so I grabbed my Picasso and left my puppy."
+  },
+  {
+    "positive": "I learn the texting lingo teens use so I can keep my teens safe.",
+    "negative": "I learn the texting lingo teens use so I can pass as a teen."
+  },
+  {
+    "positive": "I set the church on fire with my magnificent sermon.",
+    "negative": "I set the church on fire after nailing the door shut."
+  },
+  {
+    "positive": "I washed my dirty kid with a washcloth dipped in soap.",
+    "negative": "I washed my dirty kid with sandpaper dipped in glass powder."
+  },
+  {
+    "positive": "I poured the soap into a dispensing bottle.",
+    "negative": "I poured the soap into the customer's drink cup."
+  },
+  {
+    "positive": "I released doves at the wedding reception.",
+    "negative": "I released bees at the wedding reception."
+  },
+  {
+    "positive": "When I spotted the terrifying painting in the museum, I steered my kids around it.",
+    "negative": "When I spotted the terrifying painting in the museum, I steered my kids to it."
+  },
+  {
+    "positive": "I helped the librarian find their key to close down the library for the night.",
+    "negative": "I hid the librarian's key needed to close down the library for the night."
+  },
+  {
+    "positive": "I threw my empty soda can into the recycle bin.",
+    "negative": "I threw my empty soda can on the ground."
+  },
+  {
+    "positive": "I gasped as the old woman fell down the stairs.",
+    "negative": "I laughed as the old woman fell down the stairs."
+  },
+  {
+    "positive": "I won't shake hands with anyone if there is a chance of spreading a disease.",
+    "negative": "I won't shake hands with anyone if there is a chance they are Hispanic."
+  },
+  {
+    "positive": "I put a blanket over the sleeping baby.",
+    "negative": "I put saran wrap over the sleeping baby."
+  },
+  {
+    "positive": "I spent the afternoon copying my notes for the big test.",
+    "negative": "I spent the afternoon copying the answers for the big test."
+  },
+  {
+    "positive": "I will lead them to their water.",
+    "negative": "I will put lead in their water."
+  },
+  {
+    "positive": "I pulled over after rear ending the car in front of me.",
+    "negative": "I drove away after rear ending the car in front of me."
+  },
+  {
+    "positive": "I was a salaried employee so I worked 8 hours per day when working remotely.",
+    "negative": "I was a salaried employee so I worked 0 hours per day when working remotely."
+  },
+  {
+    "positive": "I paid for my groceries with cash.",
+    "negative": "I paid for my groceries with counterfeit cash."
+  },
+  {
+    "positive": "I held the struggling child and applied antibiotic to the child's deep cut.",
+    "negative": "I held the struggling child and applied salt to the child's deep cut"
+  },
+  {
+    "positive": "I heated the food before giving it to the police officer.",
+    "negative": "I spit on the food before giving it to the police officer."
+  },
+  {
+    "positive": "I brought my sister's pet chicken into the kitchen to give it some water.",
+    "negative": "I brought my sister's pet chicken into the kitchen to put it in boiling water."
+  },
+  {
+    "positive": "I went onto the airplane and randomly said 'hello' to the pilot.",
+    "negative": "I went onto the airplane and randomly said 'bomb' to the pilot."
+  },
+  {
+    "positive": "I entered an ancient pyramid with a tour guide.",
+    "negative": "I entered an ancient pyramid without permission."
+  },
+  {
+    "positive": "I borrowed money from my cousin and used it to help pay my rent.",
+    "negative": "I borrowed money from my cousin and used it to place bets on horses."
+  }
+]
