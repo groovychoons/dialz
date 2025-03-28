@@ -177,7 +177,7 @@ class Dataset:
         return dataset
 
     @classmethod
-    def load_corpus(
+    def load_dataset(
         cls, 
         model_name: str, 
         name: str, 
@@ -191,7 +191,7 @@ class Dataset:
         file_path = os.path.join(base_path, f"{name}.json")
 
         if not os.path.exists(file_path):
-            raise FileNotFoundError(f"Corpus '{name}' not found.")
+            raise FileNotFoundError(f"Dataset '{name}' not found.")
 
         # 1. Load the raw data (list of dicts with "positive" and "negative")
         with open(file_path, "r", encoding="utf-8") as file:
